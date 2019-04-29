@@ -37,11 +37,11 @@ public class InputManager : MonoBehaviour
         {
             float xInput_1 = gamepad_1.GetStick_L().X;
             float yInput_1 = gamepad_1.GetStick_L().Y;
-            if (Mathf.Abs(xInput_1) > inputThreshold || Mathf.Abs(yInput_1) > inputThreshold)
-            {
+            //if (Mathf.Abs(xInput_1) > inputThreshold || Mathf.Abs(yInput_1) > inputThreshold)
+            //{
                 inputDirection = new Vector2(xInput_1, yInput_1);
                 FirstPlayerMoveInput(inputDirection);
-            }
+            //}
 
             float xLookInput_1 = gamepad_1.GetStick_R().X;
             float yLookInput_1 = gamepad_1.GetStick_R().Y;
@@ -56,11 +56,11 @@ public class InputManager : MonoBehaviour
         {
             float xInput_2 = gamepad_2.GetStick_L().X;
             float yInput_2 = gamepad_2.GetStick_L().Y;
-            if (Mathf.Abs(xInput_2) > inputThreshold || Mathf.Abs(yInput_2) > inputThreshold)
-            {
+            //if (Mathf.Abs(xInput_2) > inputThreshold || Mathf.Abs(yInput_2) > inputThreshold)
+            //{
                 inputDirection = new Vector2(xInput_2, yInput_2);
                 SecondPlayerMoveInput(inputDirection);
-            }
+            //}
 
             float xLookInput_2 = gamepad_2.GetStick_R().X;
             float yLookInput_2= gamepad_2.GetStick_R().Y;
