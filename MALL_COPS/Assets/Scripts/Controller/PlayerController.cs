@@ -112,22 +112,30 @@ public class PlayerController : MonoBehaviour
         state = PlayerStates.NORMAL;
     }
 
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    if (state == PlayerStates.CHARGING || state == PlayerStates.TACKLING)
-    //    {
-    //        if (tackleCor != null)
-    //            StopCoroutine(tackleCor);
+    IEnumerator StopTackle()
+    {
+        state = PlayerStates.TACKLING;
+        rb.velocity = Vector3.zero;
+        tackleHitbox.SetActive(false);
+        yield return new WaitForSeconds(tackleRecovery);
+        state = PlayerStates.NORMAL;
+    }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (state == PlayerStates.CHARGING || state == PlayerStates.TACKLING)
+        {
+            if (tackleCor != null)
+                StopCoroutine(tackleCor);
 
+            StartCoroutine(StopTackle());
 
-    //        if (tag == "Civilian")
-    //        {
-    //            Debug.Log("It's a civilian!");
-    //        }
-    //    }
-
-    //}
+            if (tag == "Civilian")
+            {
+                Debug.Log("It's a civilian!");
+            }
+        }
+    }
 
     private void OnDestroy()
     {
