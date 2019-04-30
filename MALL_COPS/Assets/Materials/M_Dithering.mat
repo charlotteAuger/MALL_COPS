@@ -92,7 +92,7 @@ Material:
     - _ZWrite: 1
     - __dirty: 0
     m_Colors:
-    - _ASEOutlineColor: {r: 0, g: 0, b: 0, a: 0}
+    - _ASEOutlineColor: {r: 0.7058824, g: 0.08235294, b: 0.2392157, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _Color0: {r: 0.7075471, g: 0.08343712, b: 0.23985806, a: 1}
     - _Color1: {r: 1, g: 0.29612756, b: 0, a: 1}
