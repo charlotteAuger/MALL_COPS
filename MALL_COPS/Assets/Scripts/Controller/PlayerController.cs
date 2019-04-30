@@ -19,9 +19,11 @@ public class PlayerController : MonoBehaviour
     [Header("Tackle")]
     [SerializeField] private float chargeSpeed;
     [SerializeField] private float chargeInputLerp;
+    [SerializeField] private float chargeVibrationStep;
     [SerializeField] private float tackleTime;
     [SerializeField] private float tackleSpeed;
     [SerializeField] private float tackleRecovery;
+    private float chargeVibrationTime;
 
     [Header("References")]
     [SerializeField] private Rigidbody rb;
@@ -67,6 +69,15 @@ public class PlayerController : MonoBehaviour
 
             case PlayerStates.CHARGING:
                 rb.velocity = Vector3.Lerp(rb.velocity, (movementDirection != Vector3.zero ? movementDirection * chargeSpeed : rb.velocity), chargeInputLerp);
+
+                //Footstep vibrations
+                if (chargeVibrationTime >= chargeVibrationStep)
+                {
+                    GameManager.Instance.vibro.VibrateFor(.1f, index-1, .5f, .3f);
+                    chargeVibrationTime = 0;
+                }
+                chargeVibrationTime += Time.fixedDeltaTime;
+
                 break;
 
             case PlayerStates.TACKLING:
@@ -91,6 +102,8 @@ public class PlayerController : MonoBehaviour
         state = PlayerStates.CHARGING;
         rb.velocity = (movementDirection != Vector3.zero ? movementDirection : transform.forward) * chargeSpeed;
         tackleHitbox.SetActive(true);
+        GameManager.Instance.vibro.VibrateFor(.1f, index - 1, .3f, .1f);
+        chargeVibrationTime = 0;
     }
 
     private void OnTackleReleased()
@@ -108,6 +121,7 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(tackleTime);
         rb.velocity = Vector3.zero;
         tackleHitbox.SetActive(false);
+        GameManager.Instance.shaker.SetTrauma(.5f, .2f, 7f, 3f);
         yield return new WaitForSeconds(tackleRecovery);
         state = PlayerStates.NORMAL;
     }
@@ -115,6 +129,9 @@ public class PlayerController : MonoBehaviour
     IEnumerator StopTackle()
     {
         state = PlayerStates.TACKLING;
+        GameManager.Instance.shaker.SetTrauma(.5f, .2f, 10f, 3f);
+        GameManager.Instance.vibro.VibrateFor(.1f, index-1, .4f, 1f);
+        //GameManager.Instance.fovBooster.SetFOV(55, 0.9f);
         rb.velocity = Vector3.zero;
         tackleHitbox.SetActive(false);
         yield return new WaitForSeconds(tackleRecovery);

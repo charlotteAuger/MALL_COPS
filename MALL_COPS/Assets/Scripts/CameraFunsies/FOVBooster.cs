@@ -9,6 +9,7 @@ public class FOVBooster : MonoBehaviour
     internal float originFOV;
     float currentFOV;
     public float resetLerp;
+    public AnimationCurve lerpCurve;
 
     private void Start()
     {
@@ -32,4 +33,6 @@ public class FOVBooster : MonoBehaviour
         currentFOV = originFOV;
         lerp = resetLerp;
     }
+
+    
 }
