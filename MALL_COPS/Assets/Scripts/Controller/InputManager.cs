@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class InputManager : MonoBehaviour
 {
-    public static InputManager instance;
+    public static InputManager Instance;
 
     [SerializeField] private float inputThreshold;
     x360_Gamepad gamepad_1;
@@ -12,17 +12,21 @@ public class InputManager : MonoBehaviour
 
     void Awake()
     {
-        if (instance == null)
-            instance = this;
-        else if (instance != this)
+        if (Instance == null)
+            Instance = this;
+        else if (Instance != this)
             Destroy(this.gameObject);
     }
 
-    public delegate void InputEvent(Vector2 inputValues);
-    public static event InputEvent FirstPlayerMoveInput;
-    public static event InputEvent FirstPlayerLookInput;
-    public static event InputEvent SecondPlayerMoveInput;
-    public static event InputEvent SecondPlayerLookInput;
+    public delegate void AxisEvent(Vector2 inputValues);
+    public delegate void ButtonEvent();
+    public event AxisEvent MoveInput_1;
+    public event AxisEvent LookInput_1;
+    public event AxisEvent MoveInput_2;
+    public event AxisEvent LookInput_2;
+
+    public event ButtonEvent TacklePressed_1;
+    public event ButtonEvent TacklePressed_2;
 
     private void Start()
     {
@@ -37,18 +41,20 @@ public class InputManager : MonoBehaviour
         {
             float xInput_1 = gamepad_1.GetStick_L().X;
             float yInput_1 = gamepad_1.GetStick_L().Y;
-            //if (Mathf.Abs(xInput_1) > inputThreshold || Mathf.Abs(yInput_1) > inputThreshold)
-            //{
-                inputDirection = new Vector2(xInput_1, yInput_1);
-                FirstPlayerMoveInput(inputDirection);
-            //}
+            inputDirection = new Vector2(xInput_1, yInput_1);
+            MoveInput_1(inputDirection);
 
             float xLookInput_1 = gamepad_1.GetStick_R().X;
             float yLookInput_1 = gamepad_1.GetStick_R().Y;
             if (Mathf.Abs(xLookInput_1) > inputThreshold || Mathf.Abs(yLookInput_1) > inputThreshold)
             {
                 inputDirection = new Vector2(xLookInput_1, yLookInput_1);
-                FirstPlayerLookInput(inputDirection);
+                LookInput_1(inputDirection);
+            }
+
+            if (gamepad_1.GetButtonDown("A"))
+            {
+                TacklePressed_1();
             }
         }
 
@@ -56,18 +62,20 @@ public class InputManager : MonoBehaviour
         {
             float xInput_2 = gamepad_2.GetStick_L().X;
             float yInput_2 = gamepad_2.GetStick_L().Y;
-            //if (Mathf.Abs(xInput_2) > inputThreshold || Mathf.Abs(yInput_2) > inputThreshold)
-            //{
-                inputDirection = new Vector2(xInput_2, yInput_2);
-                SecondPlayerMoveInput(inputDirection);
-            //}
+            inputDirection = new Vector2(xInput_2, yInput_2);
+            MoveInput_2(inputDirection);
 
             float xLookInput_2 = gamepad_2.GetStick_R().X;
             float yLookInput_2= gamepad_2.GetStick_R().Y;
             if (Mathf.Abs(xLookInput_2) > inputThreshold || Mathf.Abs(yLookInput_2) > inputThreshold)
             {
                 inputDirection = new Vector2(xLookInput_2, yLookInput_2);
-                SecondPlayerLookInput(inputDirection);
+                LookInput_2(inputDirection);
+            }
+
+            if (gamepad_2.GetButtonDown("A"))
+            {
+                TacklePressed_2();
             }
         }
 
