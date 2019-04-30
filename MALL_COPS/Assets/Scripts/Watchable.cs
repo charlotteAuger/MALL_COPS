@@ -11,6 +11,6 @@ public class Watchable : MonoBehaviour
     public void CallWatchedEvent(bool _watched)
     {
         EventOnWatched?.Invoke(_watched);
-        Debug.Log(_watched ? "Watched!" : "Not watched");
+        //Debug.Log(_watched ? "Watched!" : "Not watched");
     }
 }

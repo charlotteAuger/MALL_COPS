@@ -1,5 +1,49 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2154270644336144593
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6224003979601405057}
+  - component: {fileID: 2133572369417531422}
+  m_Layer: 10
+  m_Name: TackleHitbox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &6224003979601405057
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2154270644336144593}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.88}
+  m_LocalScale: {x: 1.6022112, y: 1, z: 0.75}
+  m_Children: []
+  m_Father: {fileID: 5874637052410765029}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &2133572369417531422
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2154270644336144593}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5874637052004388096
 GameObject:
   m_ObjectHideFlags: 0
@@ -104,7 +148,7 @@ GameObject:
   - component: {fileID: 5874637052410765031}
   - component: {fileID: 5874637052410765024}
   - component: {fileID: 5874637052410765025}
-  - component: {fileID: 5874637052410765026}
+  - component: {fileID: 2570013164629810313}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -125,6 +169,7 @@ Transform:
   m_Children:
   - {fileID: 5874637052004388103}
   - {fileID: 1192002720587378484}
+  - {fileID: 6224003979601405057}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -203,7 +248,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!114 &5874637052410765026
+--- !u!114 &2570013164629810313
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -212,12 +257,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 5874637052410765027}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a0803500a2aac243b65920282b032c6, type: 3}
+  m_Script: {fileID: 11500000, guid: 1bb2f2f621d59564d9a398d7f2d01a83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rB: {fileID: 5874637052410765025}
-  speed: 10
+  index: 1
+  state: 0
+  moveSpeed: 10
   rotationFactor: 0.5
+  chargeSpeed: 20
+  chargeInputLerp: 0.02
+  tackleTime: 0.1
+  tackleSpeed: 60
+  tackleRecovery: 0.5
+  rb: {fileID: 5874637052410765025}
+  tackleHitbox: {fileID: 2154270644336144593}
 --- !u!1001 &5874637052222648803
 PrefabInstance:
   m_ObjectHideFlags: 0
