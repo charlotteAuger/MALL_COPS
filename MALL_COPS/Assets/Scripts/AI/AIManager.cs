@@ -14,17 +14,17 @@ public class AIManager : MonoBehaviour
             Destroy(this.gameObject);
     }
 
-    [SerializeField] private List<GameObject> pointsOfInterst;
+    [SerializeField] private List<PointOfInterest> pointsOfInterest;
 
-    public Vector3 GetAnIP(Vector3 position)
+    public PointOfInterest GetAnIP(Vector3 position)
     {
-        List<GameObject> temps = new List<GameObject>();
-        temps.AddRange(pointsOfInterst);
+        List<PointOfInterest> temps = new List<PointOfInterest>();
+        temps.AddRange(pointsOfInterest);
 
         float dist = Mathf.Infinity;
-        GameObject closest = null;
+        PointOfInterest closest = null;
 
-        foreach (GameObject p in temps)
+        foreach (PointOfInterest p in temps)
         {
             float d = (position - p.transform.position).magnitude;
             if (d < dist)
@@ -38,6 +38,7 @@ public class AIManager : MonoBehaviour
 
         int r = Random.Range(0, temps.Count);
 
-        return temps[r].transform.position;
+        //return temps[r];
+        return pointsOfInterest[0];
     }
 }

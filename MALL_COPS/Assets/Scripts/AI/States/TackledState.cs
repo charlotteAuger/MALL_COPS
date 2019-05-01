@@ -10,7 +10,7 @@ public class TackledState : State
     public override void OnStateEnter(AIController aiController)
     {
         //animation
-        //stop velocity
+        aiController.StopMovement();
         base.OnStateEnter(aiController);
     }
 

@@ -12,10 +12,13 @@ public class AIData : ScriptableObject
     public float tackleLookingTime_max;
     public float ipLookingTime_min;
     public float ipLookingTime_max;
+    public float shopLookingDistance;
 
     [Header("Movement")]
     public float walkSpeed_min;
     public float walkSpeed_max;
     public float fleeingSpeed;
     public float avoidanceSpeed;
+    public float stopDistance;
+    public float rotationSpeed;
 }

@@ -5,6 +5,7 @@ using UnityEngine;
 public abstract class State// : MonoBehaviour
 {
     public float t;
+    public float speed = 2f;
 
     public virtual void OnStateEnter(AIController aiController)
     {

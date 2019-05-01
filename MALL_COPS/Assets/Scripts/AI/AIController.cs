@@ -10,7 +10,7 @@ public class AIController : MonoBehaviour
     public AIData stats;
     public bool avoidance;
 
-    private NavMeshAgent navMeshAgent;
+    [SerializeField] private NavMeshAgent navMeshAgent;
     [SerializeField] private Rigidbody rB;
     private List<GameObject> actorsAround = new List<GameObject>();
 
@@ -38,28 +38,38 @@ public class AIController : MonoBehaviour
         //If the state transitiones to another one, store it
         if (newState != null)
         {
+            print(newState.GetType().ToString());
             currentState.OnStateExit(this);
             currentState = newState;
             currentState.OnStateEnter(this);
         }
 
-        if (currentState.GetType() != typeof(CaughtState) && actorsAround.Count >= 0 && avoidance)
+        if (currentState.GetType() != typeof(CaughtState) && currentState.GetType() != typeof(TackledState) && actorsAround.Count > 0 && avoidance)
         {
+            print("avoiding");
             AvoidActors(actorsAround.ToArray());
         }
+
     }
 
     public void MoveTowards(Vector3 targetPosition, float speed)
     {
-        rB.velocity = (targetPosition - transform.position).normalized * speed;
+        Vector3 v = (targetPosition - transform.position).normalized;
+        rB.velocity = v.normalized * speed;
+        LookTowards(targetPosition);
     }
-
+    
     public void LookTowards(Vector3 targetPosition)
     {
-
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(targetPosition - transform.position, Vector3.up), stats.rotationSpeed);
     }
 
-    public void AvoidActors(GameObject[] actors)
+    public void StopMovement()
+    {
+        rB.velocity = Vector3.zero;
+    }
+
+    public Vector3 AvoidActors(GameObject[] actors)
     {
         Vector3 averagedDirection = Vector3.zero;
 
@@ -71,13 +81,30 @@ public class AIController : MonoBehaviour
         averagedDirection = averagedDirection / actors.Length;
         averagedDirection = new Vector3(averagedDirection.x, 0, averagedDirection.z).normalized;
 
-        rB.AddForce(-averagedDirection * stats.avoidanceSpeed, ForceMode.Impulse);
-        //add velocity
+        rB.velocity -= averagedDirection * stats.avoidanceSpeed;
+        rB.velocity = Vector3.ClampMagnitude(rB.velocity, currentState.speed);
+        return averagedDirection * stats.avoidanceSpeed;
     }
 
-    public void GetPath(Vector3[] results)
+    public Vector3[] GetPath(Vector3 targetPosition)
     {
+        navMeshAgent.enabled = true;
+        NavMeshPath path = new NavMeshPath();
+        if (navMeshAgent.CalculatePath(targetPosition, path))
+        {
+            Vector3[] c = path.corners;
+            navMeshAgent.enabled = false;
+            return c;
+        }
+        else
+        {
+            return null;
+        }
+    }
 
+    public void PPrint(string stuff)
+    {
+        print(stuff);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -92,6 +119,7 @@ public class AIController : MonoBehaviour
     {
         if (other.tag == "Civilian" || other.tag == "Player") // or player
         {
+            print(gameObject.name + "  " + other.gameObject.name + " OUT");
             actorsAround.Remove(other.gameObject);
         }
     }
