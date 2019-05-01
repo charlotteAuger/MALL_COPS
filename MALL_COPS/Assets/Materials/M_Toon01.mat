@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: M_SmoothLit
-  m_Shader: {fileID: 4800000, guid: 76706930dbf2df04a9b59aa4b6468f07, type: 3}
+  m_Name: M_Toon01
+  m_Shader: {fileID: 4800000, guid: 37c75e312ca3add4792725a0a680f2a6, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -55,12 +55,8 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _T_Disc:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _texcoord:
-        m_Texture: {fileID: 0}
+    - _T_ColorRamp:
+        m_Texture: {fileID: 2800000, guid: 05427cdbb09a676499197ad6b1015779, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
