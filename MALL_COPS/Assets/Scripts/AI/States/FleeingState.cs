@@ -14,7 +14,7 @@ public class FleeingState : State
     {
         //ALARM
         speed = aiController.stats.fleeingSpeed;
-        aiController.SetupStolenItem(ip);
+        stolenItem = aiController.SetupStolenItem(ip);
 
         aiController.SetPresence(true);
 

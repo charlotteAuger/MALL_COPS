@@ -4,23 +4,27 @@ using UnityEngine;
 
 public class AngryState : State
 {
-    private float angerLevel = 1;
+    private float angerLevel;
 
     public override void OnStateEnter(AIController aiController)
     {
         //animation
+        angerLevel = aiController.stats.angerTime;
         base.OnStateEnter(aiController);
     }
 
     public override void OnStateExit(AIController aiController)
-    {
-        //stop animation ?
+    { 
         base.OnStateExit(aiController);
     }
 
     public override State StateEffect(AIController aiController, float dt)
     {
         aiController.LookTowards(AIManager.instance.GetClosestPlayerPosition(aiController.transform.position));
+        if (aiController.watched)
+        {
+            angerLevel -= dt * aiController.watchable.peopleWatching.Count;
+        }
         if (angerLevel <= 0)
         {
             return new GoingToIPState();

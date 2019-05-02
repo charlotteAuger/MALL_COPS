@@ -25,14 +25,14 @@ public class AIController : MonoBehaviour
     [SerializeField] private Rigidbody rB;
     [SerializeField] private Collider[] colliders;
     [SerializeField] private Renderer[] renders;
-    [SerializeField] private Watchable watchable;
+    [SerializeField] public Watchable watchable;
 
 
 
 
     private void Start()
     {
-        InitAI(true, stats);
+        InitAI(isRobber, stats);
     }
 
     public void InitAI(bool _isRobber, AIData _stats)
@@ -64,7 +64,7 @@ public class AIController : MonoBehaviour
         {
             if (watched && timeWatched < stats.pressureUpTime)
             {
-                timeWatched += Time.deltaTime;
+                timeWatched += Time.deltaTime*watchable.peopleWatching.Count;
                 pressure = stats.pressureUpCurve.Evaluate(timeWatched / stats.pressureUpTime);
             }
             else if (!watched && timeWatched > 0)
@@ -72,8 +72,6 @@ public class AIController : MonoBehaviour
                 timeWatched -= Time.deltaTime;
                 pressure = stats.pressureDownCurve.Evaluate(timeWatched / stats.pressureDownTime);
             }
-
-            print("Pressure : " + pressure);
         }
 
         //State actions
@@ -224,13 +222,27 @@ public class AIController : MonoBehaviour
 
     public void OnTackled()
     {
-        currentState.OnTackled(this);
+        State s = currentState.OnTackled(this);
+        if (s != null)
+        {
+            state = s.GetType().ToString();
+            currentState.OnStateExit(this);
+            currentState = s;
+            currentState.OnStateEnter(this);
+        }
     }
 
     public void OnSeeTackle(Vector3 tacklePosition)
     {
-        currentState.OnSeeTackle(this, tacklePosition);
-    }
+        State s = currentState.OnSeeTackle(this, tacklePosition);
+        if (s != null)
+        {
+            state = s.GetType().ToString();
+            currentState.OnStateExit(this);
+            currentState = s;
+            currentState.OnStateEnter(this);
+        }
+    }       
 
     public void Watched(bool state)
     {

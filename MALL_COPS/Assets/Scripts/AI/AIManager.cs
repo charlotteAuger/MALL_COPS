@@ -23,9 +23,6 @@ public class AIManager : MonoBehaviour
     public AnimationCurve inverseDownPressureCurve;
     [SerializeField] AIData robberData;
 
-  
-       
-    
 
     public PointOfInterest GetAnIP(Vector3 position)
     {
@@ -61,7 +58,13 @@ public class AIManager : MonoBehaviour
 
     public Vector3 GetClosestPlayerPosition(Vector3 position)
     {
-        return Vector3.zero;
+        Vector3 firstPlayerPosition = GameManager.Instance.players[0].position;
+        Vector3 secondPlayerPosition = GameManager.Instance.players[1].position;
+
+        float d1 = Vector3.Distance(position, firstPlayerPosition);
+        float d2 = Vector3.Distance(position, secondPlayerPosition);
+
+        return d1 < d2 ? firstPlayerPosition : secondPlayerPosition;
     }
 
     private void CreateInverseCurves()

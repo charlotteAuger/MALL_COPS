@@ -25,8 +25,8 @@ MonoBehaviour:
   stopDistance: 0.05
   shopLookingDistance: 2
   rotationSpeed: 0.5
-  pressureUpTime: 5
-  pressureDownTime: 3
+  pressureUpTime: 3
+  pressureDownTime: 5
   pressureUpCurve:
     serializedVersion: 2
     m_Curve:
@@ -75,3 +75,4 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  angerTime: 3
