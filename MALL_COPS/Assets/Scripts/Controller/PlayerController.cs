@@ -40,6 +40,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private ParticleSystem walkDust;
     [SerializeField] private GameObject slamDust;
     [SerializeField] private GameObject slamStars;
+    [SerializeField] private Animator anim;
 
     private void Start()
     {
@@ -113,6 +114,9 @@ public class PlayerController : MonoBehaviour
             case PlayerStates.TACKLING:
                 break;
         }
+
+        anim.SetFloat("moveZ", movementDirection.z);
+        anim.SetFloat("moveX", movementDirection.x);
     }
 
     private void RotationUpdate(Vector2 inputDirection)
