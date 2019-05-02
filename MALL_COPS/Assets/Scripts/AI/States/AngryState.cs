@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class AngryState : State
 {
+    private float angerLevel = 1;
+
     public override void OnStateEnter(AIController aiController)
     {
         //animation
@@ -18,9 +20,12 @@ public class AngryState : State
 
     public override State StateEffect(AIController aiController, float dt)
     {
-        //look at closest player
-        //if someone looking = calming
-        return base.StateEffect(aiController, dt);
+        aiController.LookTowards(AIManager.instance.GetClosestPlayerPosition(aiController.transform.position));
+        if (angerLevel <= 0)
+        {
+            return new GoingToIPState();
+        }
+        return null;
     }
 
     public override State OnSeeTackle(AIController aiController, Vector3 tacklePosition)

@@ -15,6 +15,7 @@ public class AIManager : MonoBehaviour
     }
 
     [SerializeField] private List<PointOfInterest> pointsOfInterest;
+    [SerializeField] private List<GameObject> exits;
 
     public PointOfInterest GetAnIP(Vector3 position)
     {
@@ -38,7 +39,18 @@ public class AIManager : MonoBehaviour
 
         int r = Random.Range(0, temps.Count);
 
-        //return temps[r];
-        return pointsOfInterest[0];
+        return temps[r];
+    }
+
+    public Vector3 GetSafestExit(Vector3 position)
+    {
+        int r = Random.Range(0, exits.Count);
+
+        return exits[r].transform.position;
+    }
+
+    public Vector3 GetClosestPlayerPosition(Vector3 position)
+    {
+        return Vector3.zero;
     }
 }

@@ -7,12 +7,13 @@ public enum AIAnimations { };
 [CreateAssetMenu(fileName = "AIData", menuName = "AIData", order = 0)]
 public class AIData : ScriptableObject
 {
-    [Header("Looking time")]
+    [Header("Timers")]
     public float tackleLookingTime_min;
     public float tackleLookingTime_max;
     public float ipLookingTime_min;
     public float ipLookingTime_max;
-    public float shopLookingDistance;
+    public float inShopTime_min;
+    public float inShopTime_max;
 
     [Header("Movement")]
     public float walkSpeed_min;
@@ -20,5 +21,7 @@ public class AIData : ScriptableObject
     public float fleeingSpeed;
     public float avoidanceSpeed;
     public float stopDistance;
+    public float shopLookingDistance;
     public float rotationSpeed;
+
 }

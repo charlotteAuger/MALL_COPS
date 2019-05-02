@@ -16,10 +16,12 @@ MonoBehaviour:
   tackleLookingTime_max: 2
   ipLookingTime_min: 1
   ipLookingTime_max: 2
-  shopLookingDistance: 1.5
-  walkSpeed_min: 5
-  walkSpeed_max: 10
+  inShopTime_min: 1
+  inShopTime_max: 2
+  walkSpeed_min: 2
+  walkSpeed_max: 5
   fleeingSpeed: 20
-  avoidanceSpeed: 2.5
+  avoidanceSpeed: 0.8
   stopDistance: 0.05
+  shopLookingDistance: 2
   rotationSpeed: 0.5

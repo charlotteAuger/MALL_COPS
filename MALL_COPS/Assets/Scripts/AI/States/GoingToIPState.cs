@@ -10,7 +10,7 @@ public class GoingToIPState : State
 
     public override void OnStateEnter(AIController aiController)
     {
-        speed = Random.Range(aiController.stats.walkSpeed_min, aiController.stats.walkSpeed_min);
+        speed = Random.Range(aiController.stats.walkSpeed_min, aiController.stats.walkSpeed_max);
         int i = 0;
         while (path == null && i < 10)
         {
@@ -29,7 +29,7 @@ public class GoingToIPState : State
     public override State StateEffect(AIController aiController, float dt)
     {
 
-        float remainingDistance = Vector3.Distance(path[currentWP], aiController.transform.position);
+        float remainingDistance = new Vector3(path[currentWP].x - aiController.transform.position.x, 0, path[currentWP].z - aiController.transform.position.z).magnitude;
 
         if (currentWP == path.Length - 1)
         {

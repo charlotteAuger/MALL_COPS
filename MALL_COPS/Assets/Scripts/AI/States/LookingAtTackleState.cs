@@ -5,12 +5,12 @@ using UnityEngine;
 public class LookingAtTackleState : State
 {
     public Vector3 targetPosition;
-    private float lookingDuration;
+    private float duration;
 
     public override void OnStateEnter(AIController aiController)
     {
         //Play animation maybe ?
-        //Pick random duration
+        duration = Random.Range(aiController.stats.tackleLookingTime_min, aiController.stats.tackleLookingTime_max);
         base.OnStateEnter(aiController);
     }
 
@@ -23,8 +23,9 @@ public class LookingAtTackleState : State
     public override State StateEffect(AIController aiController, float dt)
     {
         t += dt;
+        aiController.LookTowards(targetPosition);
 
-        if (t >= lookingDuration)
+        if (t >= duration)
         {
             return new GoingToIPState();
         }

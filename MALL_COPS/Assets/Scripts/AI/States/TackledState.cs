@@ -10,6 +10,7 @@ public class TackledState : State
     public override void OnStateEnter(AIController aiController)
     {
         //animation
+        duration = 0.5f;
         aiController.StopMovement();
         base.OnStateEnter(aiController);
     }

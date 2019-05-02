@@ -6,17 +6,29 @@ using UnityEngine.AI;
 public class AIController : MonoBehaviour
 {
     public State currentState;
-    public bool isRobber;
     public AIData stats;
-    public bool avoidance;
+    public string state;
 
+    public bool avoidance;
+    private List<GameObject> actorsAround = new List<GameObject>();
+
+    public bool isRobber;
+    private float pressure;
+    public bool willRob => pressure <= 0 && isRobber;
+
+    [Header("References")]
+    [SerializeField] private Transform stolenObjectAnchor;
     [SerializeField] private NavMeshAgent navMeshAgent;
     [SerializeField] private Rigidbody rB;
-    private List<GameObject> actorsAround = new List<GameObject>();
+    [SerializeField] private Collider[] colliders;
+    [SerializeField] private Renderer[] renders;
+
+
+    
 
     private void Start()
     {
-        InitAI(true, stats);
+        InitAI(false, stats);
     }
 
     public void InitAI(bool _isRobber, AIData _stats)
@@ -28,6 +40,8 @@ public class AIController : MonoBehaviour
         //Set default begining state
         currentState = new GoingToIPState();
         currentState.OnStateEnter(this);
+
+        InvokeRepeating("UpdateActorsAround", 0, 0.05f);
     }
 
     private void FixedUpdate()
@@ -38,30 +52,63 @@ public class AIController : MonoBehaviour
         //If the state transitiones to another one, store it
         if (newState != null)
         {
-            print(newState.GetType().ToString());
+            state = newState.GetType().ToString();
             currentState.OnStateExit(this);
             currentState = newState;
             currentState.OnStateEnter(this);
         }
 
-        if (currentState.GetType() != typeof(CaughtState) && currentState.GetType() != typeof(TackledState) && actorsAround.Count > 0 && avoidance)
+        if (currentState.GetType() != typeof(CaughtState) && currentState.GetType() != typeof(TackledState) && currentState.GetType() != typeof(InShopState) && actorsAround.Count > 0 && avoidance)
         {
-            print("avoiding");
-            AvoidActors(actorsAround.ToArray());
+            AvoidActors(actorsAround);
+        }
+        Debug.DrawRay(transform.position, rB.velocity, Color.magenta) ;
+        if (rB.velocity.magnitude > 0.5f)
+        {
+            LookTowards(transform.position + rB.velocity);
         }
 
     }
 
+    public void SetPresence(bool presence)
+    {
+        foreach (Collider c in colliders)
+        {
+            c.enabled = presence;
+        }
+
+        foreach (Renderer r in renders)
+        {
+            r.enabled = presence;
+        }
+
+        rB.isKinematic = !presence;
+    }
+
+    public void SetCollider(bool state)
+    {
+        foreach (Collider c in colliders)
+        {
+            c.enabled = state;
+        }
+    }
+
+
+    /// ////////////////////////////////////////// MOVEMENT FUNCTIONS
+    ///
     public void MoveTowards(Vector3 targetPosition, float speed)
     {
         Vector3 v = (targetPosition - transform.position).normalized;
         rB.velocity = v.normalized * speed;
-        LookTowards(targetPosition);
+        Debug.DrawRay(transform.position, v, Color.blue);
+        //LookTowards(targetPosition);
     }
     
     public void LookTowards(Vector3 targetPosition)
     {
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(targetPosition - transform.position, Vector3.up), stats.rotationSpeed);
+        Vector3 lookDirection = targetPosition - transform.position;
+        lookDirection = new Vector3(lookDirection.x, 0, lookDirection.z);
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(lookDirection, Vector3.up), stats.rotationSpeed);
     }
 
     public void StopMovement()
@@ -69,19 +116,38 @@ public class AIController : MonoBehaviour
         rB.velocity = Vector3.zero;
     }
 
-    public Vector3 AvoidActors(GameObject[] actors)
+    public Vector3 AvoidActors(List<GameObject> actors)
     {
         Vector3 averagedDirection = Vector3.zero;
-
-        for (int i = 0; i < actors.Length; i++)
+        //List<GameObject> temp = new List<GameObject>();
+        int n = actors.Count;
+        for (int i = 0; i < actors.Count; i++)
         {
-            averagedDirection += actors[i].transform.position - transform.position;
+            Vector3 dir = actors[i].transform.position - transform.position;
+            /*if (dir.magnitude > 4f)
+            {
+                temp.Add(actors[i]);
+                n--;
+            }
+            else
+            {*/
+                averagedDirection += dir;
+            //}
         }
 
-        averagedDirection = averagedDirection / actors.Length;
-        averagedDirection = new Vector3(averagedDirection.x, 0, averagedDirection.z).normalized;
+        /*foreach (GameObject g in temp)
+        {
+            actors.Remove(g);
+        }*/
 
-        rB.velocity -= averagedDirection * stats.avoidanceSpeed;
+        averagedDirection = averagedDirection / n;
+
+        float m = averagedDirection.magnitude;
+        averagedDirection = new Vector3(averagedDirection.z, 0, -averagedDirection.x);//.normalized * (3f - m);
+
+        rB.velocity -= averagedDirection * stats.avoidanceSpeed * currentState.speed;
+        Debug.DrawRay(transform.position, -averagedDirection, Color.green);
+
         rB.velocity = Vector3.ClampMagnitude(rB.velocity, currentState.speed);
         return averagedDirection * stats.avoidanceSpeed;
     }
@@ -90,7 +156,7 @@ public class AIController : MonoBehaviour
     {
         navMeshAgent.enabled = true;
         NavMeshPath path = new NavMeshPath();
-        if (navMeshAgent.CalculatePath(targetPosition, path))
+        if (navMeshAgent.CalculatePath(targetPosition, path) && path.status == NavMeshPathStatus.PathComplete)
         {
             Vector3[] c = path.corners;
             navMeshAgent.enabled = false;
@@ -102,12 +168,25 @@ public class AIController : MonoBehaviour
         }
     }
 
-    public void PPrint(string stuff)
+
+    /// ////////////////////////////////////////// DETECTION
+    /// 
+
+    private void UpdateActorsAround()
     {
-        print(stuff);
+        Collider[] colliders = Physics.OverlapSphere(transform.position, 1.5f);
+        actorsAround.Clear();
+
+        foreach (Collider c in colliders)
+        {
+            if (!actorsAround.Contains(c.gameObject) && c.gameObject != this.gameObject && c.gameObject.tag == "Civilian")
+            {
+                actorsAround.Add(c.gameObject);
+            }
+        }
     }
 
-    private void OnTriggerEnter(Collider other)
+    /*private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Civilian" || other.tag == "Player") // or player
         {
@@ -122,7 +201,25 @@ public class AIController : MonoBehaviour
             print(gameObject.name + "  " + other.gameObject.name + " OUT");
             actorsAround.Remove(other.gameObject);
         }
+    }*/
+
+    /// ////////////////////////////////////////// STEALING
+    /// 
+    public GameObject SetupStolenItem(PointOfInterest ip)
+    {
+        GameObject item = Instantiate(ip.valuableObject, stolenObjectAnchor, false);
+        return item;
     }
 
+    public void DropStolenItem(GameObject item)
+    {
+        //
+    }
 
+    /// ////////////////////////////////////////// DEBUG
+    /// 
+    public void PPrint(string stuff)
+    {
+        print(stuff);
+    }
 }
