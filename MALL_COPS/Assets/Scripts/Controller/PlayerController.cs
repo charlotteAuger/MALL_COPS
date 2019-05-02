@@ -33,6 +33,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject tackleHitbox;
     private Coroutine tackleCor;
     [SerializeField] private GameObject fov;
+    [SerializeField] private ParticleSystem runDust;
+    [SerializeField] private ParticleSystem runSweat;
+    [SerializeField] private ParticleSystem walkDust;
+    [SerializeField] private GameObject slamDust;
 
     private void Start()
     {
@@ -76,6 +80,12 @@ public class PlayerController : MonoBehaviour
                 velocity = moveForward * moveSpeed;
                 //velocity.y = rb.velocity.y;
                 rb.velocity = velocity;
+
+                if (!walkDust.isPlaying && moveForward != Vector3.zero)
+                { walkDust.Play(); }
+                else if (walkDust.isPlaying && moveForward == Vector3.zero)
+                { walkDust.Stop(); }
+
                 break;
 
             case PlayerStates.CHARGING:
@@ -87,6 +97,8 @@ public class PlayerController : MonoBehaviour
                 if (chargeVibrationTime >= chargeVibrationStep)
                 {
                     GameManager.Instance.vibro.VibrateFor(.1f, index-1, .5f, .3f);
+                    runDust.Play();
+                    runSweat.Play();
                     chargeVibrationTime = 0;
                 }
                 chargeVibrationTime += Time.fixedDeltaTime;
@@ -112,11 +124,19 @@ public class PlayerController : MonoBehaviour
 
     private void OnTacklePressed()
     {
-        state = PlayerStates.CHARGING;
-        rb.velocity = (moveForward != Vector3.zero ? moveForward : GetForwardFromSlopeNormal(true)) * chargeSpeed;
-        tackleHitbox.SetActive(true);
-        GameManager.Instance.vibro.VibrateFor(.1f, index - 1, .3f, .1f);
-        chargeVibrationTime = 0;
+        switch(state)
+        {
+            case PlayerStates.NORMAL:
+                state = PlayerStates.CHARGING;
+                rb.velocity = (moveForward != Vector3.zero ? moveForward : GetForwardFromSlopeNormal(true)) * chargeSpeed;
+                tackleHitbox.SetActive(true);
+                GameManager.Instance.vibro.VibrateFor(.1f, index - 1, .3f, .1f);
+                runDust.Play();
+                runSweat.Play();
+                chargeVibrationTime = 0;
+                break;
+        }
+
     }
 
     private void OnTackleReleased()
@@ -161,6 +181,7 @@ public class PlayerController : MonoBehaviour
         state = PlayerStates.TACKLING;
         GameManager.Instance.shaker.SetTrauma(.5f, .2f, 10f, 3f);
         GameManager.Instance.vibro.VibrateFor(.1f, index-1, .4f, 1f);
+        slamDust.SetActive(true);
         //GameManager.Instance.fovBooster.SetFOV(55, 0.9f);
         rb.velocity = /*new Vector3(0, rb.velocity.y, 0);*/ Vector3.zero;
         tackleHitbox.SetActive(false);

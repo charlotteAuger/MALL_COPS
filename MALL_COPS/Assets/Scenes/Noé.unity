@@ -326,6 +326,11 @@ PrefabInstance:
       propertyPath: fovBooster
       value: 
       objectReference: {fileID: 444576162}
+    - target: {fileID: 6606246667039588992, guid: 9fb00fdcb09cc95429f6b26b361b2561,
+        type: 3}
+      propertyPath: levelTimer
+      value: 120
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9fb00fdcb09cc95429f6b26b361b2561, type: 3}
 --- !u!1 &789752227
