@@ -9,6 +9,9 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
+    public Vector3 cameraPosition;
+    public Vector3 cameraRotation;
+
     [Header("Game")]
     public GameStates gameState;
     public int levelIndex;
@@ -16,16 +19,17 @@ public class GameManager : MonoBehaviour
     private float time;
 
     [Header("References")]
+    public GameObject cameraPrefab;
     public VibrationManager vibro;
-    public ScreenShaker shaker;
-    public FOVBooster fovBooster;
+    internal ScreenShaker shaker;
+    internal FOVBooster fovBooster;
     public GameObject hudManPrefab;
 
     private void Awake()
     {
         if (Instance != null)
         {
-            Destroy(this);
+            Destroy(gameObject);
             return;
         }
         Instance = this;
@@ -84,6 +88,9 @@ public class GameManager : MonoBehaviour
         time = levelTimer;
         gameState = GameStates.PLAYING;
         Instantiate(hudManPrefab);
+        GameObject cam = Instantiate(cameraPrefab, cameraPosition, Quaternion.Euler(cameraRotation));
+        fovBooster = cam.GetComponentInChildren<FOVBooster>();
+        shaker = cam.GetComponentInChildren<ScreenShaker>();
     }
 
     private void OnDisable()
