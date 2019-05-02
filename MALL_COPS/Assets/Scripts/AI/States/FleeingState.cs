@@ -8,6 +8,7 @@ public class FleeingState : State
     private GameObject stolenItem;
     private Vector3[] path;
     private int currentWP = 0;
+    private float refresh = 0.5f;
 
     public override void OnStateEnter(AIController aiController)
     {
@@ -28,6 +29,13 @@ public class FleeingState : State
 
     public override State StateEffect(AIController aiController, float dt)
     {
+        if (Time.time % refresh <= dt)
+        {
+            Vector3 target = AIManager.instance.GetSafestExit(aiController.transform.position);
+            path = aiController.GetPath(target);
+            currentWP = 0;
+        }
+
         float remainingDistance = new Vector3(path[currentWP].x - aiController.transform.position.x, 0, path[currentWP].z - aiController.transform.position.z).magnitude;
 
         

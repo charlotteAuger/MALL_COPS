@@ -9,12 +9,15 @@ public class AIController : MonoBehaviour
     public AIData stats;
     public string state;
 
+
     public bool avoidance;
     private List<GameObject> actorsAround = new List<GameObject>();
 
     public bool isRobber;
     private float pressure;
     public bool willRob => (pressure <= 0 && isRobber);
+    public bool watched;
+    public float timeWatched;
 
     [Header("References")]
     [SerializeField] private Transform stolenObjectAnchor;
@@ -22,13 +25,14 @@ public class AIController : MonoBehaviour
     [SerializeField] private Rigidbody rB;
     [SerializeField] private Collider[] colliders;
     [SerializeField] private Renderer[] renders;
+    [SerializeField] private Watchable watchable;
 
 
-    
+
 
     private void Start()
     {
-        InitAI(false, stats);
+        InitAI(true, stats);
     }
 
     public void InitAI(bool _isRobber, AIData _stats)
@@ -41,13 +45,39 @@ public class AIController : MonoBehaviour
         currentState = new GoingToIPState();
         currentState.OnStateEnter(this);
 
+
+        //Subscribe to watchable
+        watchable.EventOnWatched += Watched;
+
+        //Sensor update function
         InvokeRepeating("UpdateActorsAround", 0, 0.05f);
+    }
+
+    private void OnDestroy()
+    {
+        watchable.EventOnWatched -= Watched;
     }
 
     private void FixedUpdate()
     {
+        if (isRobber)
+        {
+            if (watched && timeWatched < stats.pressureUpTime)
+            {
+                timeWatched += Time.deltaTime;
+                pressure = stats.pressureUpCurve.Evaluate(timeWatched / stats.pressureUpTime);
+            }
+            else if (!watched && timeWatched > 0)
+            {
+                timeWatched -= Time.deltaTime;
+                pressure = stats.pressureDownCurve.Evaluate(timeWatched / stats.pressureDownTime);
+            }
+
+            print("Pressure : " + pressure);
+        }
+
         //State actions
-        State newState = currentState.StateEffect(this,Time.fixedDeltaTime);
+        State newState = currentState.StateEffect(this, Time.fixedDeltaTime);
 
         //If the state transitiones to another one, store it
         if (newState != null)
@@ -62,7 +92,8 @@ public class AIController : MonoBehaviour
         {
             AvoidActors(actorsAround);
         }
-        Debug.DrawRay(transform.position, rB.velocity, Color.magenta) ;
+        Debug.DrawRay(transform.position, rB.velocity, Color.magenta);
+
         if (rB.velocity.magnitude > 0.5f)
         {
             LookTowards(transform.position + rB.velocity);
@@ -102,7 +133,7 @@ public class AIController : MonoBehaviour
         rB.velocity = v.normalized * speed;
         Debug.DrawRay(transform.position, v, Color.blue);
     }
-    
+
     public void LookTowards(Vector3 targetPosition)
     {
         Vector3 lookDirection = targetPosition - transform.position;
@@ -161,12 +192,13 @@ public class AIController : MonoBehaviour
 
     private void UpdateActorsAround()
     {
-        Collider[] colliders = Physics.OverlapSphere(transform.position, 1.5f);
+        Collider[] shortColliders = Physics.OverlapSphere(transform.position, 1.5f);
+        Collider[] longColliders = Physics.OverlapSphere(transform.position, 4f);
         actorsAround.Clear();
 
-        foreach (Collider c in colliders)
+        foreach (Collider c in shortColliders)
         {
-            if (!actorsAround.Contains(c.gameObject) && c.gameObject != this.gameObject && c.gameObject.tag == "Civilian")
+            if (!actorsAround.Contains(c.gameObject) && c.gameObject != this.gameObject && (c.gameObject.tag == "Civilian" || c.gameObject.tag == "Player"))
             {
                 actorsAround.Add(c.gameObject);
             }
@@ -189,6 +221,22 @@ public class AIController : MonoBehaviour
             actorsAround.Remove(other.gameObject);
         }
     }*/
+
+    public void OnTackled()
+    {
+        currentState.OnTackled(this);
+    }
+
+    public void OnSeeTackle(Vector3 tacklePosition)
+    {
+        currentState.OnSeeTackle(this, tacklePosition);
+    }
+
+    public void Watched(bool state)
+    {
+        watched = state;
+        timeWatched = state ? AIManager.instance.inverseUpPressureCurve.Evaluate(pressure)*stats.pressureUpTime : AIManager.instance.inverseDownPressureCurve.Evaluate(pressure)*stats.pressureDownTime;
+    }
 
     /// ////////////////////////////////////////// STEALING
     /// 

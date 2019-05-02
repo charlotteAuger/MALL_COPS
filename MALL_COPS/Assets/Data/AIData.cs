@@ -24,4 +24,11 @@ public class AIData : ScriptableObject
     public float shopLookingDistance;
     public float rotationSpeed;
 
+    [Header("Pressure")]
+
+    public float pressureUpTime;
+    public float pressureDownTime;
+    public AnimationCurve pressureUpCurve;
+    public AnimationCurve pressureDownCurve;
+
 }

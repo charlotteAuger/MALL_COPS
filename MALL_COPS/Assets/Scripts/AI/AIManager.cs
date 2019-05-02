@@ -12,10 +12,20 @@ public class AIManager : MonoBehaviour
             instance = this;
         else if (instance != this)
             Destroy(this.gameObject);
+
+        CreateInverseCurves();
     }
 
     [SerializeField] private List<PointOfInterest> pointsOfInterest;
     [SerializeField] private List<GameObject> exits;
+
+    public AnimationCurve inverseUpPressureCurve;
+    public AnimationCurve inverseDownPressureCurve;
+    [SerializeField] AIData robberData;
+
+  
+       
+    
 
     public PointOfInterest GetAnIP(Vector3 position)
     {
@@ -52,5 +62,23 @@ public class AIManager : MonoBehaviour
     public Vector3 GetClosestPlayerPosition(Vector3 position)
     {
         return Vector3.zero;
+    }
+
+    private void CreateInverseCurves()
+    {
+        inverseUpPressureCurve = new AnimationCurve();
+        for (int i = 0; i < robberData.pressureUpCurve.length; i++)
+        {
+            Keyframe inverseKey = new Keyframe(robberData.pressureUpCurve.keys[i].value, robberData.pressureUpCurve.keys[i].time);
+            inverseUpPressureCurve.AddKey(inverseKey);
+        }
+
+        inverseDownPressureCurve = new AnimationCurve();
+        for (int i = 0; i < robberData.pressureDownCurve.length; i++)
+        {
+            Keyframe inverseKey = new Keyframe(robberData.pressureDownCurve.keys[i].value, robberData.pressureDownCurve.keys[i].time);
+            inverseDownPressureCurve.AddKey(inverseKey);
+        }
+
     }
 }
