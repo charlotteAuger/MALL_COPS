@@ -20,7 +20,7 @@ MonoBehaviour:
   inShopTime_max: 2
   walkSpeed_min: 2
   walkSpeed_max: 5
-  fleeingSpeed: 20
+  fleeingSpeed: 6
   avoidanceSpeed: 0.8
   stopDistance: 0.05
   shopLookingDistance: 2

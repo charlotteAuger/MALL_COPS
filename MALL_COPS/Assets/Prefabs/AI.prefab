@@ -174,7 +174,7 @@ MonoBehaviour:
   state: 
   avoidance: 1
   isRobber: 0
-  stolenObjectAnchor: {fileID: 0}
+  stolenObjectAnchor: {fileID: 4967945155099894782}
   navMeshAgent: {fileID: 4967945155391071441}
   rB: {fileID: 4967945155391071445}
   colliders:

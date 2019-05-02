@@ -19,7 +19,6 @@ public class FleeingState : State
 
         Vector3 target = AIManager.instance.GetSafestExit(aiController.transform.position);
         path = aiController.GetPath(target);
-        base.OnStateEnter(aiController);
     }
 
     public override void OnStateExit(AIController aiController)
@@ -29,7 +28,17 @@ public class FleeingState : State
 
     public override State StateEffect(AIController aiController, float dt)
     {
-        return base.StateEffect(aiController, dt);
+        float remainingDistance = new Vector3(path[currentWP].x - aiController.transform.position.x, 0, path[currentWP].z - aiController.transform.position.z).magnitude;
+
+        
+        if (remainingDistance <= aiController.stats.stopDistance && currentWP < path.Length-1)
+        {
+            currentWP++;
+        }
+       
+
+        aiController.MoveTowards(path[currentWP], speed);
+        return null;
     }
 
     public override State OnSeeTackle(AIController aiController, Vector3 tacklePosition)

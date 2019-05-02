@@ -14,7 +14,7 @@ public class AIController : MonoBehaviour
 
     public bool isRobber;
     private float pressure;
-    public bool willRob => pressure <= 0 && isRobber;
+    public bool willRob => (pressure <= 0 && isRobber);
 
     [Header("References")]
     [SerializeField] private Transform stolenObjectAnchor;
@@ -101,7 +101,6 @@ public class AIController : MonoBehaviour
         Vector3 v = (targetPosition - transform.position).normalized;
         rB.velocity = v.normalized * speed;
         Debug.DrawRay(transform.position, v, Color.blue);
-        //LookTowards(targetPosition);
     }
     
     public void LookTowards(Vector3 targetPosition)
@@ -119,26 +118,14 @@ public class AIController : MonoBehaviour
     public Vector3 AvoidActors(List<GameObject> actors)
     {
         Vector3 averagedDirection = Vector3.zero;
-        //List<GameObject> temp = new List<GameObject>();
+
         int n = actors.Count;
         for (int i = 0; i < actors.Count; i++)
         {
             Vector3 dir = actors[i].transform.position - transform.position;
-            /*if (dir.magnitude > 4f)
-            {
-                temp.Add(actors[i]);
-                n--;
-            }
-            else
-            {*/
-                averagedDirection += dir;
-            //}
-        }
+            averagedDirection += dir;
 
-        /*foreach (GameObject g in temp)
-        {
-            actors.Remove(g);
-        }*/
+        }
 
         averagedDirection = averagedDirection / n;
 
@@ -208,12 +195,15 @@ public class AIController : MonoBehaviour
     public GameObject SetupStolenItem(PointOfInterest ip)
     {
         GameObject item = Instantiate(ip.valuableObject, stolenObjectAnchor, false);
+        item.transform.localPosition = Vector3.zero;
         return item;
     }
 
     public void DropStolenItem(GameObject item)
     {
-        //
+        item.transform.parent = null;
+        Rigidbody rB = item.GetComponent<Rigidbody>();
+        rB.isKinematic = false;
     }
 
     /// ////////////////////////////////////////// DEBUG
