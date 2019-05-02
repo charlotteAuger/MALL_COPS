@@ -13,10 +13,10 @@ TagManager:
   - UI
   - 
   - 
-  - Wall
-  - Target
-  - 
-  - 
+  - Obstacle
+  - WatchableObject
+  - Tackle
+  - Civilian
   - 
   - 
   - 

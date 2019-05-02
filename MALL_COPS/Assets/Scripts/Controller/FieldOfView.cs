@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class FieldOfView : MonoBehaviour
 {
@@ -12,7 +13,8 @@ public class FieldOfView : MonoBehaviour
     public LayerMask obstacleMask;
 
     [HideInInspector]
-    public List<Transform> visibleTargets = new List<Transform>();
+    public List<Watchable> visibleTargets = new List<Watchable>();
+    List<Watchable> previousTargets = new List<Watchable>();
 
     public float meshResolution;
     public int edgeResolveIterations;
@@ -38,6 +40,7 @@ public class FieldOfView : MonoBehaviour
 
     void FindVisibleTargets()
     {
+        previousTargets.AddRange(visibleTargets);
         visibleTargets.Clear();
         //Get targets in radius
         Collider[] targetsInViewRadius = Physics.OverlapSphere(transform.position, viewRadius, targetMask);
@@ -47,16 +50,38 @@ public class FieldOfView : MonoBehaviour
             Transform target = targetsInViewRadius[i].transform;
             Vector3 dirToTarget = (target.position - transform.position).normalized;
             //Check if the target is in the field of view
-            if (Vector3.Angle(transform.forward, dirToTarget) < viewAngle/2)
+            if (Vector3.Angle(transform.forward, dirToTarget) < viewAngle / 2)
             {
                 float distToTarget = Vector3.Distance(transform.position, target.position);
                 //Check if there is a line of sight to the target
                 if (!Physics.Raycast(transform.position, dirToTarget, distToTarget, obstacleMask))
                 {
-                    visibleTargets.Add(target);
+                    Watchable watchable = target.GetComponent<Watchable>();
+                    if (watchable)
+                    {
+                        visibleTargets.Add(watchable);
+                        //Tell watchables they're watched if they weren't before
+                        if (!watchable.peopleWatching.Contains(this))
+                        {
+                            watchable.CallWatchedEvent(true);
+                            watchable.peopleWatching.Add(this);
+                        }
+                        else //otherwise remove them so the previous list so only non-watched remain
+                        {
+                            previousTargets.Remove(watchable);
+                        }
+                    }
                 }
             }
         }
+
+        //Tell watchables they're not watched anymore if they're not in the current visible list
+        foreach (Watchable watchable in previousTargets)
+        {
+            watchable.CallWatchedEvent(false);
+            watchable.peopleWatching.Remove(this);
+        }
+        previousTargets.Clear();
     }
 
     void DrawFieldOfView()
