@@ -37,6 +37,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private ParticleSystem runSweat;
     [SerializeField] private ParticleSystem walkDust;
     [SerializeField] private GameObject slamDust;
+    [SerializeField] private GameObject slamStars;
 
     private void Start()
     {
@@ -200,6 +201,7 @@ public class PlayerController : MonoBehaviour
 
             if (tag == "Civilian")
             {
+                slamStars.SetActive(true);
                 Debug.Log("It's a civilian!");
             }
         }
