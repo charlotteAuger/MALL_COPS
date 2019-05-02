@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
 
     public Vector3 cameraPosition;
     public Vector3 cameraRotation;
+    [HideInInspector] public List<Transform> players = new List<Transform>();
 
     [Header("Game")]
     public GameStates gameState;
@@ -85,6 +86,7 @@ public class GameManager : MonoBehaviour
 
     private void OnNewScene(Scene scene, LoadSceneMode mode)
     {
+        players.Clear();
         time = levelTimer;
         gameState = GameStates.PLAYING;
         Instantiate(hudManPrefab);
