@@ -15,6 +15,9 @@ public class PlayerController : MonoBehaviour
     [Header("Movement")]
     [SerializeField] private float moveSpeed;
     [SerializeField] private float rotationFactor;
+    [SerializeField] private LayerMask floorScanMask;
+    [SerializeField] private float walkableMaxAngle;
+    private Vector3 moveForward;
 
     [Header("Tackle")]
     [SerializeField] private float chargeSpeed;
@@ -29,6 +32,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Rigidbody rb;
     [SerializeField] private GameObject tackleHitbox;
     private Coroutine tackleCor;
+    [SerializeField] private GameObject fov;
+    [SerializeField] private ParticleSystem runDust;
+    [SerializeField] private ParticleSystem runSweat;
+    [SerializeField] private ParticleSystem walkDust;
+    [SerializeField] private GameObject slamDust;
 
     private void Start()
     {
@@ -53,7 +61,7 @@ public class PlayerController : MonoBehaviour
         switch(state)
         {        
             case PlayerStates.CHARGING:
-                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(rb.velocity.normalized, Vector3.up), rotationFactor);
+                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(new Vector3 (rb.velocity.x, 0, rb.velocity.z).normalized, Vector3.up), rotationFactor);
                 break;
         }
     }
@@ -61,19 +69,36 @@ public class PlayerController : MonoBehaviour
     private void MovementUpdate(Vector2 _inputDirection)
     {
         movementDirection = new Vector3(_inputDirection.x, 0, _inputDirection.y);
+        Vector3 velocity;
+
+        moveForward = GetForwardFromSlopeNormal(false);
+        Debug.DrawLine(transform.position, transform.position + moveForward * 2, Color.magenta);
+
         switch(state)
         {
             case PlayerStates.NORMAL:
-                rb.velocity = movementDirection * moveSpeed;
+                velocity = moveForward * moveSpeed;
+                //velocity.y = rb.velocity.y;
+                rb.velocity = velocity;
+
+                if (!walkDust.isPlaying && moveForward != Vector3.zero)
+                { walkDust.Play(); }
+                else if (walkDust.isPlaying && moveForward == Vector3.zero)
+                { walkDust.Stop(); }
+
                 break;
 
             case PlayerStates.CHARGING:
-                rb.velocity = Vector3.Lerp(rb.velocity, (movementDirection != Vector3.zero ? movementDirection * chargeSpeed : rb.velocity), chargeInputLerp);
+                velocity = (moveForward != Vector3.zero ? moveForward * chargeSpeed : rb.velocity);
+                //velocity.y = rb.velocity.y;
+                rb.velocity = Vector3.Lerp(rb.velocity, velocity, chargeInputLerp);
 
                 //Footstep vibrations
                 if (chargeVibrationTime >= chargeVibrationStep)
                 {
                     GameManager.Instance.vibro.VibrateFor(.1f, index-1, .5f, .3f);
+                    runDust.Play();
+                    runSweat.Play();
                     chargeVibrationTime = 0;
                 }
                 chargeVibrationTime += Time.fixedDeltaTime;
@@ -99,11 +124,19 @@ public class PlayerController : MonoBehaviour
 
     private void OnTacklePressed()
     {
-        state = PlayerStates.CHARGING;
-        rb.velocity = (movementDirection != Vector3.zero ? movementDirection : transform.forward) * chargeSpeed;
-        tackleHitbox.SetActive(true);
-        GameManager.Instance.vibro.VibrateFor(.1f, index - 1, .3f, .1f);
-        chargeVibrationTime = 0;
+        switch(state)
+        {
+            case PlayerStates.NORMAL:
+                state = PlayerStates.CHARGING;
+                rb.velocity = (moveForward != Vector3.zero ? moveForward : GetForwardFromSlopeNormal(true)) * chargeSpeed;
+                tackleHitbox.SetActive(true);
+                GameManager.Instance.vibro.VibrateFor(.1f, index - 1, .3f, .1f);
+                runDust.Play();
+                runSweat.Play();
+                chargeVibrationTime = 0;
+                break;
+        }
+
     }
 
     private void OnTackleReleased()
@@ -115,11 +148,28 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private Vector3 GetForwardFromSlopeNormal(bool _usingRotation)
+    {
+        Debug.DrawLine(transform.position, transform.position + -transform.up * .5f, Color.red);
+        if (Physics.Raycast(transform.position, -transform.up, out RaycastHit hit, .5f, floorScanMask))
+        {
+            if (Mathf.Abs(Vector3.Angle(transform.up, hit.normal)) < walkableMaxAngle)
+            {
+                Vector3 right = _usingRotation ? transform.right : Vector3.Cross(transform.up, movementDirection);
+                return Vector3.Cross(right, hit.normal);
+            }
+        }
+
+        return (_usingRotation ? transform.forward : movementDirection);
+    }
+
     IEnumerator Tackle()
     {
-        rb.velocity = transform.forward * tackleSpeed;
+        Vector3 velocity = GetForwardFromSlopeNormal(true) * tackleSpeed;
+        //velocity.y = rb.velocity.y;
+        rb.velocity = velocity;
         yield return new WaitForSeconds(tackleTime);
-        rb.velocity = Vector3.zero;
+        rb.velocity = /*new Vector3(0, rb.velocity.y, 0);*/ Vector3.zero;
         tackleHitbox.SetActive(false);
         GameManager.Instance.shaker.SetTrauma(.5f, .2f, 7f, 3f);
         yield return new WaitForSeconds(tackleRecovery);
@@ -131,8 +181,9 @@ public class PlayerController : MonoBehaviour
         state = PlayerStates.TACKLING;
         GameManager.Instance.shaker.SetTrauma(.5f, .2f, 10f, 3f);
         GameManager.Instance.vibro.VibrateFor(.1f, index-1, .4f, 1f);
+        slamDust.SetActive(true);
         //GameManager.Instance.fovBooster.SetFOV(55, 0.9f);
-        rb.velocity = Vector3.zero;
+        rb.velocity = /*new Vector3(0, rb.velocity.y, 0);*/ Vector3.zero;
         tackleHitbox.SetActive(false);
         yield return new WaitForSeconds(tackleRecovery);
         state = PlayerStates.NORMAL;

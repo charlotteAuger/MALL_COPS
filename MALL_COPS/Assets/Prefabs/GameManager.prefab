@@ -47,8 +47,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 924bfd8b36cd62e428b66f76d92b4679, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cameraPosition: {x: 0, y: 27, z: -22}
+  cameraRotation: {x: 60, y: 0, z: 0}
+  gameState: 0
+  levelIndex: 0
+  levelTimer: 120
+  cameraPrefab: {fileID: 2515359421736248829, guid: 91ccfaabb8b108040aaa1ebfbd36aaca,
+    type: 3}
   vibro: {fileID: 5435186947555935663}
-  shaker: {fileID: 0}
+  hudManPrefab: {fileID: 377498327887410778, guid: f48aa57a0470f204dae8c6d1447c6993,
+    type: 3}
 --- !u!114 &7890985387797047465
 MonoBehaviour:
   m_ObjectHideFlags: 0
