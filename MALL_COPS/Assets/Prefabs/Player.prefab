@@ -5139,6 +5139,10 @@ MonoBehaviour:
   tackleTime: 0.1
   tackleSpeed: 60
   tackleRecovery: 0.5
+  alertRadius: 3
+  civilianMask:
+    serializedVersion: 2
+    m_Bits: 2048
   rb: {fileID: 5874637052410765025}
   tackleHitbox: {fileID: 2154270644336144593}
   fov: {fileID: 1192002720587378480}
@@ -5146,7 +5150,8 @@ MonoBehaviour:
   runSweat: {fileID: 6978810178308769492}
   walkDust: {fileID: 3951011719234337283}
   slamDust: {fileID: 1940498829677562561}
-  slamStars: {fileID: 0}
+  slamStars: {fileID: 7848685396499837666, guid: 9faf4bd085e776042a6799160a3e4002,
+    type: 3}
 --- !u!1001 &286048050547949448
 PrefabInstance:
   m_ObjectHideFlags: 0
