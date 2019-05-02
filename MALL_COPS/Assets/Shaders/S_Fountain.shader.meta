@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+guid: 921afada1986e224cbf9acbd57a20212
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures:
+  - _TextureSample0: {fileID: 2800000, guid: 6c39c8096b4725142b0527c76a6b8255, type: 3}
+  - _water_emissive: {fileID: 2800000, guid: 58887fa3ad71e09499db9d08b6d18532, type: 3}
+  - _water_opacity: {fileID: 2800000, guid: 6c39c8096b4725142b0527c76a6b8255, type: 3}
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
