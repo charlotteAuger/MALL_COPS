@@ -27,6 +27,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float tackleSpeed;
     [SerializeField] private float tackleRecovery;
     private float chargeVibrationTime;
+    [SerializeField] private float alertRadius;
+    [SerializeField] private LayerMask civilianMask;
 
     [Header("References")]
     [SerializeField] private Rigidbody rb;
@@ -37,6 +39,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private ParticleSystem runSweat;
     [SerializeField] private ParticleSystem walkDust;
     [SerializeField] private GameObject slamDust;
+    [SerializeField] private GameObject slamStars;
 
     private void Start()
     {
@@ -54,6 +57,8 @@ public class PlayerController : MonoBehaviour
             InputManager.Instance.TacklePressed_2 += OnTacklePressed;
             InputManager.Instance.TackleReleased_2 += OnTackleReleased;
         }
+
+        GameManager.Instance.players.Add(transform);
     }
 
     private void Update()
@@ -198,8 +203,20 @@ public class PlayerController : MonoBehaviour
 
             StartCoroutine(StopTackle());
 
-            if (tag == "Civilian")
+            if (other.tag == "Civilian")
             {
+                slamStars.SetActive(true);
+
+                //AIController tackled = other.GetComponent<AIController>().OnTackled();
+                Collider[] colliders = Physics.OverlapSphere(transform.position, alertRadius, civilianMask);
+                foreach (Collider col in colliders)
+                {
+                    if (col == other)
+                    { continue; }
+
+                    //col.GetComponent<AIController>().OnSeeTackle();
+                }
+
                 Debug.Log("It's a civilian!");
             }
         }
