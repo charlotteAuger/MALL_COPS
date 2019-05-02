@@ -27,12 +27,20 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float tackleSpeed;
     [SerializeField] private float tackleRecovery;
     private float chargeVibrationTime;
+    [SerializeField] private float alertRadius;
+    [SerializeField] private LayerMask civilianMask;
 
     [Header("References")]
     [SerializeField] private Rigidbody rb;
     [SerializeField] private GameObject tackleHitbox;
     private Coroutine tackleCor;
     [SerializeField] private GameObject fov;
+    [SerializeField] private ParticleSystem runDust;
+    [SerializeField] private ParticleSystem runSweat;
+    [SerializeField] private ParticleSystem walkDust;
+    [SerializeField] private GameObject slamDust;
+    [SerializeField] private GameObject slamStars;
+    [SerializeField] private Animator anim;
 
     private void Start()
     {
@@ -50,6 +58,8 @@ public class PlayerController : MonoBehaviour
             InputManager.Instance.TacklePressed_2 += OnTacklePressed;
             InputManager.Instance.TackleReleased_2 += OnTackleReleased;
         }
+
+        GameManager.Instance.players.Add(transform);
     }
 
     private void Update()
@@ -76,6 +86,12 @@ public class PlayerController : MonoBehaviour
                 velocity = moveForward * moveSpeed;
                 //velocity.y = rb.velocity.y;
                 rb.velocity = velocity;
+
+                if (!walkDust.isPlaying && moveForward != Vector3.zero)
+                { walkDust.Play(); }
+                else if (walkDust.isPlaying && moveForward == Vector3.zero)
+                { walkDust.Stop(); }
+
                 break;
 
             case PlayerStates.CHARGING:
@@ -87,6 +103,8 @@ public class PlayerController : MonoBehaviour
                 if (chargeVibrationTime >= chargeVibrationStep)
                 {
                     GameManager.Instance.vibro.VibrateFor(.1f, index-1, .5f, .3f);
+                    runDust.Play();
+                    runSweat.Play();
                     chargeVibrationTime = 0;
                 }
                 chargeVibrationTime += Time.fixedDeltaTime;
@@ -96,6 +114,9 @@ public class PlayerController : MonoBehaviour
             case PlayerStates.TACKLING:
                 break;
         }
+
+        anim.SetFloat("moveZ", movementDirection.z);
+        anim.SetFloat("moveX", movementDirection.x);
     }
 
     private void RotationUpdate(Vector2 inputDirection)
@@ -112,11 +133,20 @@ public class PlayerController : MonoBehaviour
 
     private void OnTacklePressed()
     {
-        state = PlayerStates.CHARGING;
-        rb.velocity = (moveForward != Vector3.zero ? moveForward : GetForwardFromSlopeNormal(true)) * chargeSpeed;
-        tackleHitbox.SetActive(true);
-        GameManager.Instance.vibro.VibrateFor(.1f, index - 1, .3f, .1f);
-        chargeVibrationTime = 0;
+        switch(state)
+        {
+            case PlayerStates.NORMAL:
+                state = PlayerStates.CHARGING;
+                rb.velocity = (moveForward != Vector3.zero ? moveForward : GetForwardFromSlopeNormal(true)) * chargeSpeed;
+                tackleHitbox.SetActive(true);
+                GameManager.Instance.vibro.VibrateFor(.1f, index - 1, .3f, .1f);
+                runDust.Play();
+                runSweat.Play();
+                chargeVibrationTime = 0;
+                anim.SetBool("isCharging", true);
+                break;
+        }
+
     }
 
     private void OnTackleReleased()
@@ -152,6 +182,7 @@ public class PlayerController : MonoBehaviour
         rb.velocity = /*new Vector3(0, rb.velocity.y, 0);*/ Vector3.zero;
         tackleHitbox.SetActive(false);
         GameManager.Instance.shaker.SetTrauma(.5f, .2f, 7f, 3f);
+        anim.SetBool("isCharging", false);
         yield return new WaitForSeconds(tackleRecovery);
         state = PlayerStates.NORMAL;
     }
@@ -161,8 +192,10 @@ public class PlayerController : MonoBehaviour
         state = PlayerStates.TACKLING;
         GameManager.Instance.shaker.SetTrauma(.5f, .2f, 10f, 3f);
         GameManager.Instance.vibro.VibrateFor(.1f, index-1, .4f, 1f);
+        slamDust.SetActive(true);
         //GameManager.Instance.fovBooster.SetFOV(55, 0.9f);
         rb.velocity = /*new Vector3(0, rb.velocity.y, 0);*/ Vector3.zero;
+        anim.SetBool("isCharging", false);
         tackleHitbox.SetActive(false);
         yield return new WaitForSeconds(tackleRecovery);
         state = PlayerStates.NORMAL;
@@ -177,8 +210,20 @@ public class PlayerController : MonoBehaviour
 
             StartCoroutine(StopTackle());
 
-            if (tag == "Civilian")
+            if (other.tag == "Civilian")
             {
+                slamStars.SetActive(true);
+
+                //AIController tackled = other.GetComponent<AIController>().OnTackled();
+                Collider[] colliders = Physics.OverlapSphere(transform.position, alertRadius, civilianMask);
+                foreach (Collider col in colliders)
+                {
+                    if (col == other)
+                    { continue; }
+
+                    //col.GetComponent<AIController>().OnSeeTackle();
+                }
+
                 Debug.Log("It's a civilian!");
             }
         }
