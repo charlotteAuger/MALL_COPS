@@ -8,14 +8,15 @@ public class AngryState : State
 
     public override void OnStateEnter(AIController aiController)
     {
-        //animation
         angerLevel = aiController.stats.angerTime;
+        aiController.angryRend.enabled = true;
+        aiController.angryRend.materials[0].SetFloat("AngerValue", 0f);
         base.OnStateEnter(aiController);
     }
 
     public override void OnStateExit(AIController aiController)
-    { 
-        base.OnStateExit(aiController);
+    {
+        aiController.angryRend.enabled = false;
     }
 
     public override State StateEffect(AIController aiController, float dt)
@@ -24,7 +25,7 @@ public class AngryState : State
         if (aiController.watched)
         {
             angerLevel -= dt * aiController.watchable.peopleWatching.Count;
-            aiController.angryRend.material.SetFloat("AngerValue", angerLevel / aiController.stats.angerTime);
+            aiController.angryRend.materials[0].SetFloat("_AngerValue", 1-angerLevel / aiController.stats.angerTime);
         }
         if (angerLevel <= 0)
         {
