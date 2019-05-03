@@ -3,7 +3,32 @@ guid: f905daf4ede2a8641a0f84ceba52531a
 ModelImporter:
   serializedVersion: 25
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Civilian_03_CapBlack1
+    second: {fileID: 2100000, guid: 9aac95835c203c94ca5bd419c3393832, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Civilian_03_HairGreyish1
+    second: {fileID: 2100000, guid: da50c4420a24fe440bbbcc931784fc70, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Civilian_03_Skin03
+    second: {fileID: 2100000, guid: d699dc8f124f47f49bbf3438f84cdda6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Civilian_03_TrouserBlue1
+    second: {fileID: 2100000, guid: e3e81f9787d420c42991f13361a0d99a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Civilian_03_TrouserOrangeYellow1
+    second: {fileID: 2100000, guid: 813cf42b44319b1408c6453d7d84c350, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
