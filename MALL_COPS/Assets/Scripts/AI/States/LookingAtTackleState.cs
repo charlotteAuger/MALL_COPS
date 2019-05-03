@@ -9,7 +9,7 @@ public class LookingAtTackleState : State
 
     public override void OnStateEnter(AIController aiController)
     {
-        //Play animation maybe ?
+        //aiController.anim.SetTrigger("surprised");
         
         duration = Random.Range(aiController.stats.tackleLookingTime_min, aiController.stats.tackleLookingTime_max);
     }
@@ -22,7 +22,6 @@ public class LookingAtTackleState : State
 
     public override State StateEffect(AIController aiController, float dt)
     {
-        aiController.PPrint("looking at tackle");
         t += dt;
         aiController.LookTowards(targetPosition);
 

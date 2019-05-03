@@ -9,7 +9,8 @@ public class TackledState : State
 
     public override void OnStateEnter(AIController aiController)
     {
-        //animation
+        //aiController.anim.SetTrigger("tackled");
+
         duration = aiController.stats.timeTackled; ///HOW LONG ?
         aiController.StopMovement();
         base.OnStateEnter(aiController);
@@ -17,7 +18,10 @@ public class TackledState : State
 
     public override void OnStateExit(AIController aiController)
     {
-        base.OnStateExit(aiController);
+        if (!wasRobbing)
+        {
+            //aiController.anim.SetTrigger("standsUp");
+        }
     }
 
     public override State StateEffect(AIController aiController, float dt)
