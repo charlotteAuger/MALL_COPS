@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
     [Header("References")]
     public GameObject cameraPrefab;
     public VibrationManager vibro;
+    internal Camera mainCam;
     internal ScreenShaker shaker;
     internal FOVBooster fovBooster;
     public GameObject hudManPrefab;
@@ -93,6 +94,7 @@ public class GameManager : MonoBehaviour
         GameObject cam = Instantiate(cameraPrefab, cameraPosition, Quaternion.Euler(cameraRotation));
         fovBooster = cam.GetComponentInChildren<FOVBooster>();
         shaker = cam.GetComponentInChildren<ScreenShaker>();
+        mainCam = cam.GetComponentInChildren<Camera>();
     }
 
     private void OnDisable()
