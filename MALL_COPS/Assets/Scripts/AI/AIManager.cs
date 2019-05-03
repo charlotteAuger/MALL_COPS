@@ -31,6 +31,7 @@ public class AIManager : MonoBehaviour
     [SerializeField] GameObject aiPrefab;
     [SerializeField] private int maxNbrOfAI;
     [HideInInspector] public List<AIController> aiInGame;
+    [SerializeField] private float checkInterval;
 
 
     private void Start()
@@ -49,7 +50,7 @@ public class AIManager : MonoBehaviour
             a.InitAI(false, innocentData);
         }
 
-        InvokeRepeating("CheckAINbr", 2f, 3f);
+        InvokeRepeating("CheckAINbr", 0, checkInterval);
     }
 
     public void CheckAINbr()
