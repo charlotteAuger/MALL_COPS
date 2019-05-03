@@ -9,7 +9,7 @@ public class TackledState : State
 
     public override void OnStateEnter(AIController aiController)
     {
-        //aiController.anim.SetTrigger("tackled");
+        aiController.anim.SetTrigger("tackled");
 
         duration = aiController.stats.timeTackled; ///HOW LONG ?
         aiController.StopMovement();
@@ -20,7 +20,7 @@ public class TackledState : State
     {
         if (!wasRobbing)
         {
-            //aiController.anim.SetTrigger("standsUp");
+            aiController.anim.SetTrigger("standsUp");
         }
     }
 

@@ -144,6 +144,7 @@ public class PlayerController : MonoBehaviour
                 runSweat.Play();
                 chargeVibrationTime = 0;
                 anim.SetBool("isCharging", true);
+                SFXManager.Instance.StartRunningSFX();
                 break;
         }
 
@@ -177,11 +178,13 @@ public class PlayerController : MonoBehaviour
     {
         anim.SetBool("isTackling", true);
         anim.SetBool("isCharging", false);
+        SFXManager.Instance.LaunchPlaquageSFX();
         Vector3 velocity = GetForwardFromSlopeNormal(true) * tackleSpeed;
         //velocity.y = rb.velocity.y;
         rb.velocity = velocity;
         yield return new WaitForSeconds(tackleTime);
         anim.SetBool("isTackling", false);
+        SFXManager.Instance.EndPlaquageEmptySFX();
         rb.velocity = /*new Vector3(0, rb.velocity.y, 0);*/ Vector3.zero;
         tackleHitbox.SetActive(false);
         GameManager.Instance.shaker.SetTrauma(.5f, .2f, 7f, 3f);
@@ -216,12 +219,15 @@ public class PlayerController : MonoBehaviour
                 tackleCor = null;
             }
             StartCoroutine(StopTackle());
+            SFXManager.Instance.EndPlaquageFullSFX();
 
             if (other.tag == "Civilian")
             {
                 slamStars.SetActive(true);
 
-                other.GetComponent<AIController>().OnTackled();
+                AIController ai = other.GetComponent<AIController>();
+                ai.OnTackled();
+
                 Collider[] colliders = Physics.OverlapSphere(transform.position, alertRadius, civilianMask);
                 foreach (Collider col in colliders)
                 {
