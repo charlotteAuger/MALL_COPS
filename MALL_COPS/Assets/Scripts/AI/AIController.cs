@@ -8,6 +8,7 @@ public class AIController : MonoBehaviour
     public State currentState;
     public AIData stats;
     public string state;
+    bool isOn;
 
 
     public bool avoidance;
@@ -29,19 +30,12 @@ public class AIController : MonoBehaviour
     [SerializeField] public Animator anim;
     [SerializeField] public Renderer angryRend;
 
-
-
-
-    private void Start()
-    {
-        InitAI(isRobber, stats);
-    }
-
     public void InitAI(bool _isRobber, AIData _stats)
     {
         //Initialize if robber or civilian
         isRobber = _isRobber;
         stats = _stats;
+        isOn = true;
 
         //Set default begining state
         currentState = new GoingToIPState();
@@ -63,6 +57,8 @@ public class AIController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!isOn) { return; }
+
         if (isRobber)
         {
             if (watched && timeWatched < stats.pressureUpTime)
@@ -98,13 +94,19 @@ public class AIController : MonoBehaviour
         if (rB.velocity.magnitude > 0.5f)
         {
             LookTowards(transform.position + rB.velocity);
-            //anim.SetBool("isWalking", true);
+            anim.SetBool("isWalking", true);
         }
         else
         {
-            //anim.SetBool("isWalking", false);
+            anim.SetBool("isWalking", false);
         }
 
+    }
+
+    public void DestroyAI()
+    {
+        AIManager.instance.aiInGame.Remove(this);
+        Destroy(this.gameObject);
     }
 
     public void SetPresence(bool presence)
@@ -164,7 +166,7 @@ public class AIController : MonoBehaviour
         averagedDirection = averagedDirection / n;
 
         float m = averagedDirection.magnitude;
-        averagedDirection = new Vector3(averagedDirection.z, 0, -averagedDirection.x);//.normalized * (3f - m);
+        averagedDirection = new Vector3(averagedDirection.z, 0, -averagedDirection.x).normalized * (3f - m);
 
         rB.velocity -= averagedDirection * stats.avoidanceSpeed * currentState.speed;
         Debug.DrawRay(transform.position, -averagedDirection, Color.green);
