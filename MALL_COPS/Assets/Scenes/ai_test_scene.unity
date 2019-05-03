@@ -2547,16 +2547,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8810459288497560957, guid: cd8ac63a106951a4db28cca92826812c,
         type: 3}
-      propertyPath: pointsOfInterest.Array.size
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 8810459288497560957, guid: cd8ac63a106951a4db28cca92826812c,
-        type: 3}
-      propertyPath: exits.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8810459288497560957, guid: cd8ac63a106951a4db28cca92826812c,
-        type: 3}
       propertyPath: pointsOfInterest.Array.data[0]
       value: 
       objectReference: {fileID: 1999896826}
@@ -2585,22 +2575,5 @@ PrefabInstance:
       propertyPath: exits.Array.data[0]
       value: 
       objectReference: {fileID: 307400360}
-    - target: {fileID: 8810459288497560957, guid: cd8ac63a106951a4db28cca92826812c,
-        type: 3}
-      propertyPath: innocentData
-      value: 
-      objectReference: {fileID: 11400000, guid: 02d4b4a6beed1bc4dba43ff27a3220e2,
-        type: 2}
-    - target: {fileID: 8810459288497560957, guid: cd8ac63a106951a4db28cca92826812c,
-        type: 3}
-      propertyPath: maxNbrOfAI
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 8810459288497560957, guid: cd8ac63a106951a4db28cca92826812c,
-        type: 3}
-      propertyPath: aiPrefab
-      value: 
-      objectReference: {fileID: 4967945155391071447, guid: 4925d52a5a726114e83aa199079ee0c7,
-        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cd8ac63a106951a4db28cca92826812c, type: 3}
