@@ -11,12 +11,14 @@ public class AngryState : State
         angerLevel = aiController.stats.angerTime;
         aiController.angryRend.enabled = true;
         aiController.angryRend.materials[0].SetFloat("AngerValue", 0f);
-        base.OnStateEnter(aiController);
+        SFXManager.Instance.PlayInnocentAngrySFX();
     }
 
     public override void OnStateExit(AIController aiController)
     {
         aiController.angryRend.enabled = false;
+        SFXManager.Instance.StopInnocentAngrySFX();
+
     }
 
     public override State StateEffect(AIController aiController, float dt)

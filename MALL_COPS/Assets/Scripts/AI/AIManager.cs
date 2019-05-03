@@ -97,6 +97,7 @@ public class AIManager : MonoBehaviour
 
         AIController aiController = Instantiate(aiPrefab, spawnPoint, Quaternion.identity).GetComponent<AIController>();
         aiController.InitAI(false, innocentData);
+        aiInGame.Add(aiController);
     }
 
     public void InnocentAll()
