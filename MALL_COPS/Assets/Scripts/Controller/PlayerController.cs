@@ -175,28 +175,33 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator Tackle()
     {
+        anim.SetBool("isTackling", true);
+        anim.SetBool("isCharging", false);
         Vector3 velocity = GetForwardFromSlopeNormal(true) * tackleSpeed;
         //velocity.y = rb.velocity.y;
         rb.velocity = velocity;
         yield return new WaitForSeconds(tackleTime);
+        anim.SetBool("isTackling", false);
         rb.velocity = /*new Vector3(0, rb.velocity.y, 0);*/ Vector3.zero;
         tackleHitbox.SetActive(false);
         GameManager.Instance.shaker.SetTrauma(.5f, .2f, 7f, 3f);
-        anim.SetBool("isCharging", false);
         yield return new WaitForSeconds(tackleRecovery);
         state = PlayerStates.NORMAL;
+        tackleCor = null;
     }
 
     IEnumerator StopTackle()
     {
+        anim.SetBool("isTackling", true);
+        anim.SetBool("isCharging", false);
         state = PlayerStates.TACKLING;
         GameManager.Instance.shaker.SetTrauma(.5f, .2f, 10f, 3f);
         GameManager.Instance.vibro.VibrateFor(.1f, index-1, .4f, 1f);
         slamDust.SetActive(true);
         //GameManager.Instance.fovBooster.SetFOV(55, 0.9f);
         rb.velocity = /*new Vector3(0, rb.velocity.y, 0);*/ Vector3.zero;
-        anim.SetBool("isCharging", false);
         tackleHitbox.SetActive(false);
+        anim.SetBool("isTackling", false);
         yield return new WaitForSeconds(tackleRecovery);
         state = PlayerStates.NORMAL;
     }
@@ -206,8 +211,10 @@ public class PlayerController : MonoBehaviour
         if (state == PlayerStates.CHARGING || state == PlayerStates.TACKLING)
         {
             if (tackleCor != null)
+            {
                 StopCoroutine(tackleCor);
-
+                tackleCor = null;
+            }
             StartCoroutine(StopTackle());
 
             if (other.tag == "Civilian")
