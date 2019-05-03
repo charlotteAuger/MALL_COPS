@@ -24,6 +24,7 @@ public class AngryState : State
         if (aiController.watched)
         {
             angerLevel -= dt * aiController.watchable.peopleWatching.Count;
+            aiController.angryRend.material.SetFloat("AngerValue", angerLevel / aiController.stats.angerTime);
         }
         if (angerLevel <= 0)
         {

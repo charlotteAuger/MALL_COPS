@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afd57304515f82540b8c5e41074a9282, type: 3}
   m_Name: ROBBER_Data
   m_EditorClassIdentifier: 
-  tackleLookingTime_min: 1
-  tackleLookingTime_max: 2
+  tackleLookingTime_min: 2
+  tackleLookingTime_max: 3
   ipLookingTime_min: 1
   ipLookingTime_max: 2
   inShopTime_min: 1
   inShopTime_max: 2
+  timeTackled: 0
   walkSpeed_min: 2
   walkSpeed_max: 5
   fleeingSpeed: 7
