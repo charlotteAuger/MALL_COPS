@@ -16,8 +16,8 @@ public class GameManager : MonoBehaviour
     [Header("Game")]
     public GameStates gameState;
     public int levelIndex;
-    public float levelTimer;
-    private float time;
+    public float maxTimer;
+    [HideInInspector] public float timer;
 
     [Header("References")]
     public GameObject cameraPrefab;
@@ -55,10 +55,10 @@ public class GameManager : MonoBehaviour
 
     private void UpdateTimer()
     {
-        time -= Time.deltaTime;
-        HUDManager.Instance.UpdateTimer(time);
+        timer -= Time.deltaTime;
+        HUDManager.Instance.UpdateTimer(timer);
 
-        if (time <= 0)
+        if (timer <= 0)
         {
             gameState = GameStates.END_OF_LEVEL;
             HUDManager.Instance.OnVictory();
@@ -88,7 +88,7 @@ public class GameManager : MonoBehaviour
     private void OnNewScene(Scene scene, LoadSceneMode mode)
     {
         players.Clear();
-        time = levelTimer;
+        timer = maxTimer;
         gameState = GameStates.PLAYING;
         Instantiate(hudManPrefab);
         GameObject cam = Instantiate(cameraPrefab, cameraPosition, Quaternion.Euler(cameraRotation));
