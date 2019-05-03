@@ -11,6 +11,11 @@ public class Item : MonoBehaviour
     {
         rB.isKinematic = false;
         c.enabled = true;
-        ///forward force
+        Invoke("Poof", 1f);
+    }
+
+    private void Poof()
+    {
+        Destroy(this.gameObject);
     }
 }
