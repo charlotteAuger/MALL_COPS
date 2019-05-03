@@ -8,4 +8,7 @@ EditorBuildSettings:
   - enabled: 1
     path: "Assets/Scenes/No\xE9.unity"
     guid: 243c332b5e1e783459318dfe37136e93
+  - enabled: 1
+    path: Assets/Scenes/Galv02_LD1.unity
+    guid: 8ed7a03ba08c7a148b4d7e6afc0b1d87
   m_configObjects: {}

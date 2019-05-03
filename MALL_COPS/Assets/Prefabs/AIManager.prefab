@@ -43,6 +43,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9d0c73795e36284eb6d2c8d1163b029, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pointsOfInterest: []
-  exits: []
+  pointsOfInterest:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  exits:
+  - {fileID: 0}
+  inverseUpPressureCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  inverseDownPressureCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   robberData: {fileID: 11400000, guid: 5679ac58d4ea6d74598b454cbf4e349e, type: 2}
+  innocentData: {fileID: 11400000, guid: 02d4b4a6beed1bc4dba43ff27a3220e2, type: 2}
+  aiPrefab: {fileID: 4967945155391071447, guid: 4925d52a5a726114e83aa199079ee0c7,
+    type: 3}
+  maxNbrOfAI: 7
+  aiInGame: []
+  checkInterval: 2
