@@ -44,6 +44,7 @@ public class AIController : MonoBehaviour
         //Set default begining state
         currentState = new GoingToIPState();
         currentState.OnStateEnter(this);
+        state = currentState.GetType().ToString();
 
 
         //Subscribe to watchable
@@ -235,6 +236,7 @@ public class AIController : MonoBehaviour
     public void OnSeeTackle(Vector3 tacklePosition)
     {
         State s = currentState.OnSeeTackle(this, tacklePosition);
+        print("See tackle !!!");
         if (s != null)
         {
             state = s.GetType().ToString();
@@ -252,18 +254,17 @@ public class AIController : MonoBehaviour
 
     /// ////////////////////////////////////////// STEALING
     /// 
-    public GameObject SetupStolenItem(PointOfInterest ip)
+    public Item SetupStolenItem(PointOfInterest ip)
     {
         GameObject item = Instantiate(ip.valuableObject, stolenObjectAnchor, false);
         item.transform.localPosition = Vector3.zero;
-        return item;
+        return item.GetComponent<Item>();
     }
 
-    public void DropStolenItem(GameObject item)
+    public void DropStolenItem(Item item)
     {
         item.transform.parent = null;
-        Rigidbody rB = item.GetComponent<Rigidbody>();
-        rB.isKinematic = false;
+        item.Drop();
     }
 
     /// ////////////////////////////////////////// DEBUG

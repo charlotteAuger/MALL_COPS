@@ -5,7 +5,7 @@ using UnityEngine;
 public class FleeingState : State
 {
     public PointOfInterest ip;
-    private GameObject stolenItem;
+    private Item stolenItem;
     private Vector3[] path;
     private int currentWP = 0;
     private float refresh = 0.5f;
