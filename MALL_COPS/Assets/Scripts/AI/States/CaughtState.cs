@@ -4,19 +4,25 @@ using UnityEngine;
 
 public class CaughtState : State
 {
+    private float duration;
     public override void OnStateEnter(AIController aiController)
     {
-        base.OnStateEnter(aiController);
+        duration = 1f;
     }
 
     public override void OnStateExit(AIController aiController)
     {
-        base.OnStateExit(aiController);
+      
     }
 
     public override State StateEffect(AIController aiController, float dt)
     {
-        return base.StateEffect(aiController, dt);
+        t += dt;
+        if (t >= duration)
+        {
+            aiController.DestroyAI();
+        }
+        return null;
     }
 
     public override State OnSeeTackle(AIController aiController, Vector3 tacklePosition)

@@ -13,6 +13,8 @@ public class FleeingState : State
     public override void OnStateEnter(AIController aiController)
     {
         //ALARM
+        aiController.anim.SetTrigger("flees");
+
         speed = aiController.stats.fleeingSpeed;
         stolenItem = aiController.SetupStolenItem(ip);
 
@@ -39,9 +41,17 @@ public class FleeingState : State
         float remainingDistance = new Vector3(path[currentWP].x - aiController.transform.position.x, 0, path[currentWP].z - aiController.transform.position.z).magnitude;
 
         
-        if (remainingDistance <= aiController.stats.stopDistance && currentWP < path.Length-1)
+        if (remainingDistance <= aiController.stats.stopDistance)
         {
-            currentWP++;
+            if (currentWP < path.Length - 1)
+            {
+                currentWP++;
+            }
+            else
+            {
+                GameManager.Instance.Lose();
+                aiController.DestroyAI();
+            }
         }
        
 

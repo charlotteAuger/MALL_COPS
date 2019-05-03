@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class HUDManager : MonoBehaviour
 {
     public static HUDManager Instance;
     public GameObject victory;
     public GameObject defeat;
+    public Button next;
+    public Button retry;
     public GameObject exitButton;
     public Text timer;
 
@@ -33,6 +36,9 @@ public class HUDManager : MonoBehaviour
     {
         timer.gameObject.SetActive(false);
         victory.SetActive(true);
+        //EventSystem.current.firstSelectedGameObject = next;
+        next.Select();
+        next.OnSelect(null);
         exitButton.SetActive(true);
     }
 
@@ -40,6 +46,7 @@ public class HUDManager : MonoBehaviour
     {
         timer.gameObject.SetActive(false);
         defeat.SetActive(true);
+        //EventSystem.current.firstSelectedGameObject = retry;
         exitButton.SetActive(true);
     }
 

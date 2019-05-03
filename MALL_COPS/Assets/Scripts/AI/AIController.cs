@@ -16,16 +16,18 @@ public class AIController : MonoBehaviour
     public bool isRobber;
     private float pressure;
     public bool willRob => (pressure <= 0 && isRobber);
-    public bool watched;
-    public float timeWatched;
+    [HideInInspector] public bool watched;
+    [HideInInspector] public float timeWatched;
 
     [Header("References")]
     [SerializeField] private Transform stolenObjectAnchor;
     [SerializeField] private NavMeshAgent navMeshAgent;
     [SerializeField] private Rigidbody rB;
     [SerializeField] private Collider[] colliders;
-    [SerializeField] private Renderer[] renders;
+    [SerializeField] private RandomCivilian randomCiv;
     [SerializeField] public Watchable watchable;
+    [SerializeField] public Animator anim;
+    [SerializeField] public Renderer angryRend;
 
 
 
@@ -96,8 +98,18 @@ public class AIController : MonoBehaviour
         if (rB.velocity.magnitude > 0.5f)
         {
             LookTowards(transform.position + rB.velocity);
+            anim.SetBool("isWalking", true);
+        }
+        else
+        {
+            anim.SetBool("isWalking", false);
         }
 
+    }
+
+    public void DestroyAI()
+    {
+        Destroy(this.gameObject);
     }
 
     public void SetPresence(bool presence)
@@ -107,10 +119,7 @@ public class AIController : MonoBehaviour
             c.enabled = presence;
         }
 
-        foreach (Renderer r in renders)
-        {
-            r.enabled = presence;
-        }
+        randomCiv.rend.enabled = presence;
 
         rB.isKinematic = !presence;
     }
@@ -160,7 +169,7 @@ public class AIController : MonoBehaviour
         averagedDirection = averagedDirection / n;
 
         float m = averagedDirection.magnitude;
-        averagedDirection = new Vector3(averagedDirection.z, 0, -averagedDirection.x);//.normalized * (3f - m);
+        averagedDirection = new Vector3(averagedDirection.z, 0, -averagedDirection.x).normalized * (3f - m);
 
         rB.velocity -= averagedDirection * stats.avoidanceSpeed * currentState.speed;
         Debug.DrawRay(transform.position, -averagedDirection, Color.green);
@@ -236,7 +245,6 @@ public class AIController : MonoBehaviour
     public void OnSeeTackle(Vector3 tacklePosition)
     {
         State s = currentState.OnSeeTackle(this, tacklePosition);
-        print("See tackle !!!");
         if (s != null)
         {
             state = s.GetType().ToString();
