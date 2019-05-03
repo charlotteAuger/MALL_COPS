@@ -40,6 +40,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private ParticleSystem walkDust;
     [SerializeField] private GameObject slamDust;
     [SerializeField] private GameObject slamStars;
+    [SerializeField] private Animator anim;
 
     private void Start()
     {
@@ -113,6 +114,9 @@ public class PlayerController : MonoBehaviour
             case PlayerStates.TACKLING:
                 break;
         }
+
+        anim.SetFloat("moveZ", movementDirection.z);
+        anim.SetFloat("moveX", movementDirection.x);
     }
 
     private void RotationUpdate(Vector2 inputDirection)
@@ -139,6 +143,7 @@ public class PlayerController : MonoBehaviour
                 runDust.Play();
                 runSweat.Play();
                 chargeVibrationTime = 0;
+                anim.SetBool("isCharging", true);
                 break;
         }
 
@@ -177,6 +182,7 @@ public class PlayerController : MonoBehaviour
         rb.velocity = /*new Vector3(0, rb.velocity.y, 0);*/ Vector3.zero;
         tackleHitbox.SetActive(false);
         GameManager.Instance.shaker.SetTrauma(.5f, .2f, 7f, 3f);
+        anim.SetBool("isCharging", false);
         yield return new WaitForSeconds(tackleRecovery);
         state = PlayerStates.NORMAL;
     }
@@ -189,6 +195,7 @@ public class PlayerController : MonoBehaviour
         slamDust.SetActive(true);
         //GameManager.Instance.fovBooster.SetFOV(55, 0.9f);
         rb.velocity = /*new Vector3(0, rb.velocity.y, 0);*/ Vector3.zero;
+        anim.SetBool("isCharging", false);
         tackleHitbox.SetActive(false);
         yield return new WaitForSeconds(tackleRecovery);
         state = PlayerStates.NORMAL;
