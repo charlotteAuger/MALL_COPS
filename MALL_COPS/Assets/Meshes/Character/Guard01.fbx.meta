@@ -3,7 +3,37 @@ guid: 042f8b71da41c354299e32be420f014d
 ModelImporter:
   serializedVersion: 25
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Guard_01_CapBlack1
+    second: {fileID: 2100000, guid: 9aac95835c203c94ca5bd419c3393832, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Guard_01_CapBlue1
+    second: {fileID: 2100000, guid: 8c1b28ae0a9cf06499e0ecda687e02bb, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Guard_01_Glasses1
+    second: {fileID: 2100000, guid: 9aac95835c203c94ca5bd419c3393832, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Guard_01_ShirtBlue1
+    second: {fileID: 2100000, guid: 4c474e2898954be4596f7a636f8b593a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Guard_01_Skin02
+    second: {fileID: 2100000, guid: d78c1330e85dc8946a37faef48032e8e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Guard_01_TrouserBlue1
+    second: {fileID: 2100000, guid: e3e81f9787d420c42991f13361a0d99a, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
