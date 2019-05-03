@@ -7,7 +7,10 @@ public class SFXManager : MonoBehaviour
     public static SFXManager Instance;
 
     public AudioSource musicSource;
+    public AudioSource ambientSource;
     public AudioSource[] SFXSources;
+    public AudioSource[] angrySources;
+    private int angryMen;
 
     [Header("AudioFiles")]
     public AudioClip SFX_MallAmbiance;
@@ -35,51 +38,66 @@ public class SFXManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public void StartRunningSFX() {
+    public void StartRunningSFX()
+    {
       //  SFXSources[1].Stop();
-        SFXSources[1].PlayOneShot(SFX_RunBoucle);
+        SFXSources[0].PlayOneShot(SFX_RunBoucle);
     }
 
     public void LaunchPlaquageSFX()
     {
       //  SFXSources[1].Stop();
-        SFXSources[1].PlayOneShot(SFX_PlaquageLaunch);
+        SFXSources[0].PlayOneShot(SFX_PlaquageLaunch);
     }
 
     public void EndPlaquageEmptySFX()
     {
        // SFXSources[1].Stop();
-        SFXSources[1].PlayOneShot(SFX_PlaquageReceptionEmpty);
+        SFXSources[0].PlayOneShot(SFX_PlaquageReceptionEmpty);
     }
 
     public void EndPlaquageFullSFX()
     {
         //SFXSources[1].Stop();
-        SFXSources[1].PlayOneShot(SFX_PlaquageReceptionFull);
+        SFXSources[0].PlayOneShot(SFX_PlaquageReceptionFull);
     }
 
     public void InnocentPlaquageSFX()
     {
         //SFXSources[2].Stop();
-        SFXSources[2].PlayOneShot(SFX_ChocFoule);
+        SFXSources[1].PlayOneShot(SFX_ChocFoule);
     }
 
     public void TheftAlarmSFX()
     {
         //SFXSources[2].Stop();
-        SFXSources[2].PlayOneShot(SFX_TheftAlarm);
+        ambientSource.PlayOneShot(SFX_TheftAlarm);
     }
 
-    public void InnocentAngrySFX()
+    public void PlayInnocentAngrySFX()
     {
-        SFXSources[0].Stop();
-        SFXSources[0].PlayOneShot(SFX_LoopEmbrouille);
+        //SFXSources[0].Stop();
+        //SFXSources[0].PlayOneShot(SFX_LoopEmbrouille);
+        angryMen++;  
+        if (angryMen > 3)
+            return;
+
+        angrySources[angryMen - 1].Play();
+    }
+
+    public void StopInnocentAngrySFX()
+    {
+        if (angryMen == 0)
+            return;
+
+        angryMen--;
+        angrySources[angryMen].Stop();
     }
 
     public void EndTimerSFX()
     {
         //SFXSources[1].Stop();
-        SFXSources[1].PlayOneShot(SFX_RunBoucle);
+        musicSource.PlayOneShot(SFX_TimerEndJingle);
     }
 
     //public void MallAmbianceSFX()
@@ -91,15 +109,13 @@ public class SFXManager : MonoBehaviour
     public void LoseJingleSFX()
     {
         musicSource.Stop();
-        SFXSources[1].Stop();
-        SFXSources[1].PlayOneShot(SFX_LooseJingle);
+        musicSource.PlayOneShot(SFX_LooseJingle);
     }
 
     public void WinJingleSFX()
     {
         musicSource.Stop();
-        SFXSources[1].Stop();
-        SFXSources[1].PlayOneShot(SFX_WinJingle);
+        musicSource.PlayOneShot(SFX_WinJingle);
     }
 
     public void PlayMenuMusic()
