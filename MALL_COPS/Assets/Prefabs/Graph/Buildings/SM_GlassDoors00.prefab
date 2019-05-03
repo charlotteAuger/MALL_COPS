@@ -48,7 +48,7 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: ef0da51d464347f4f8f05ef0b026771f,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.002156
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: ef0da51d464347f4f8f05ef0b026771f,
         type: 3}
@@ -58,7 +58,7 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: ef0da51d464347f4f8f05ef0b026771f,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.31536818
+      value: 0.32
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: ef0da51d464347f4f8f05ef0b026771f,
         type: 3}
@@ -123,7 +123,7 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: ef0da51d464347f4f8f05ef0b026771f,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.5021563
+      value: -3.75
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: ef0da51d464347f4f8f05ef0b026771f,
         type: 3}
@@ -133,7 +133,7 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: ef0da51d464347f4f8f05ef0b026771f,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.31536818
+      value: 0.32
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: ef0da51d464347f4f8f05ef0b026771f,
         type: 3}
@@ -190,6 +190,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3352116385029312757}
     m_Modifications:
+    - target: {fileID: -927199367670048503, guid: 809f0147e2c5c5f46bad7a7b6c345eb3,
+        type: 3}
+      propertyPath: m_Name
+      value: SM_GlassDoorFrame00
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 809f0147e2c5c5f46bad7a7b6c345eb3,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -244,11 +249,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: 809f0147e2c5c5f46bad7a7b6c345eb3,
-        type: 3}
-      propertyPath: m_Name
-      value: SM_GlassDoorFrame00
       objectReference: {fileID: 0}
     - target: {fileID: -1504981713932161579, guid: 809f0147e2c5c5f46bad7a7b6c345eb3,
         type: 3}

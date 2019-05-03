@@ -47,8 +47,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 924bfd8b36cd62e428b66f76d92b4679, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraPosition: {x: 0, y: 27, z: -22}
-  cameraRotation: {x: 60, y: 0, z: 0}
+  cameraPosition: {x: 0, y: 18, z: -25}
+  cameraRotation: {x: 50, y: 0, z: 0}
+  players: []
   gameState: 0
   levelIndex: 0
   levelTimer: 120
