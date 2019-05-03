@@ -52,7 +52,8 @@ MonoBehaviour:
   players: []
   gameState: 0
   levelIndex: 0
-  levelTimer: 120
+  maxTimer: 120
+  timer: 0
   cameraPrefab: {fileID: 2515359421736248829, guid: 91ccfaabb8b108040aaa1ebfbd36aaca,
     type: 3}
   vibro: {fileID: 5435186947555935663}

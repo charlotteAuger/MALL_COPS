@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class AIManager : MonoBehaviour
 {
@@ -16,13 +17,127 @@ public class AIManager : MonoBehaviour
         CreateInverseCurves();
     }
 
+    bool ended;
+
     [SerializeField] private List<PointOfInterest> pointsOfInterest;
     [SerializeField] private List<GameObject> exits;
 
     public AnimationCurve inverseUpPressureCurve;
     public AnimationCurve inverseDownPressureCurve;
     [SerializeField] AIData robberData;
+    [SerializeField] AIData innocentData;
 
+    [Header("Spawn")]
+    [SerializeField] GameObject aiPrefab;
+    [SerializeField] private int maxNbrOfAI;
+    [HideInInspector] public List<AIController> aiInGame;
+
+
+    private void Start()
+    {
+        InitializeAISystem();
+    }
+
+    /// ///////////////////// MANAGEMENT
+    /// 
+    public void InitializeAISystem()
+    {
+        aiInGame.AddRange(FindObjectsOfType<AIController>());
+
+        foreach (AIController a in aiInGame)
+        {
+            a.InitAI(false, innocentData);
+        }
+
+        InvokeRepeating("CheckAINbr", 2f, 3f);
+    }
+
+    public void CheckAINbr()
+    {
+        if (GameManager.Instance.gameState == GameStates.END_OF_LEVEL) { return; }
+
+        float t = GameManager.Instance.timer / GameManager.Instance.maxTimer;
+
+        if (aiInGame.Count < maxNbrOfAI)
+        {
+            SpawnAI();
+        }
+
+        int n = (t < 0.5f) ? 3 : ((t < 0.8f) ? 2 : 1);
+        int r = 0;
+
+        foreach (AIController a in aiInGame)
+        {
+            if (a.isRobber)
+            {
+                r++;
+            }
+        }
+
+        if (r < n)
+        {
+            CorruptAI();
+        }
+    }
+
+    private void Update()
+    {
+        if (!ended && GameManager.Instance.gameState == GameStates.END_OF_LEVEL)
+        {
+            ended = true;
+            InnocentAll();
+        }
+    }
+
+    public void SpawnAI()
+    {
+        int r = Random.Range(0, exits.Count);
+        Vector3 spawnPoint = exits[r].transform.position;
+
+        AIController aiController = Instantiate(aiPrefab, spawnPoint, Quaternion.identity).GetComponent<AIController>();
+        aiController.InitAI(false, innocentData);
+    }
+
+    public void InnocentAll()
+    {
+        foreach (AIController a in aiInGame)
+        {
+            a.isRobber = false;
+        }
+    }
+
+    public void CorruptAI()
+    {
+        bool innocentFound = false;
+        AIController targetAI = null;
+        int i = 0;
+        while (!innocentFound && i < aiInGame.Count)
+        {
+            AIController checkedAI = aiInGame[i];
+            if (!checkedAI.isRobber)
+            {
+                targetAI = checkedAI;
+                innocentFound = true;
+            }
+            i++;
+        }
+
+        if (targetAI != null)
+        {
+            targetAI.isRobber = true;
+            targetAI.stats = robberData;
+        }
+    }
+
+ 
+    /// ///////////////////// SERVICES
+
+    public Vector3 GetSafestExit(Vector3 position)
+    {
+        int r = Random.Range(0, exits.Count);
+
+        return exits[r].transform.position;
+    }
 
     public PointOfInterest GetAnIP(Vector3 position)
     {
@@ -47,13 +162,6 @@ public class AIManager : MonoBehaviour
         int r = Random.Range(0, temps.Count);
 
         return temps[r];
-    }
-
-    public Vector3 GetSafestExit(Vector3 position)
-    {
-        int r = Random.Range(0, exits.Count);
-
-        return exits[r].transform.position;
     }
 
     public Vector3 GetClosestPlayerPosition(Vector3 position)
