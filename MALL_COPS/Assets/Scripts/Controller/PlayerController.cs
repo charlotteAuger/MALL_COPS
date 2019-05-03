@@ -221,17 +221,17 @@ public class PlayerController : MonoBehaviour
             {
                 slamStars.SetActive(true);
 
-                //AIController tackled = other.GetComponent<AIController>().OnTackled();
+                other.GetComponent<AIController>().OnTackled();
                 Collider[] colliders = Physics.OverlapSphere(transform.position, alertRadius, civilianMask);
                 foreach (Collider col in colliders)
                 {
                     if (col == other)
                     { continue; }
 
-                    //col.GetComponent<AIController>().OnSeeTackle();
+                    col.GetComponent<AIController>().OnSeeTackle(transform.position);
                 }
 
-                Debug.Log("It's a civilian!");
+                //Debug.Log("It's a civilian!");
             }
         }
     }
