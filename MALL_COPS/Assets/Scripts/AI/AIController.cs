@@ -8,6 +8,7 @@ public class AIController : MonoBehaviour
     public State currentState;
     public AIData stats;
     public string state;
+    bool isOn;
 
 
     public bool avoidance;
@@ -26,27 +27,21 @@ public class AIController : MonoBehaviour
     [SerializeField] private Collider[] colliders;
     [SerializeField] private RandomCivilian randomCiv;
     [SerializeField] public Watchable watchable;
-    [SerializeField] public Animator anim;
+    [HideInInspector] public Animator anim;
     [SerializeField] public Renderer angryRend;
-
-
-
-
-    private void Start()
-    {
-        InitAI(isRobber, stats);
-    }
 
     public void InitAI(bool _isRobber, AIData _stats)
     {
         //Initialize if robber or civilian
         isRobber = _isRobber;
         stats = _stats;
+        isOn = true;
 
         //Set default begining state
         currentState = new GoingToIPState();
         currentState.OnStateEnter(this);
         state = currentState.GetType().ToString();
+        anim = randomCiv.anim;
 
 
         //Subscribe to watchable
@@ -63,6 +58,8 @@ public class AIController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!isOn) { return; }
+
         if (isRobber)
         {
             if (watched && timeWatched < stats.pressureUpTime)
@@ -109,6 +106,7 @@ public class AIController : MonoBehaviour
 
     public void DestroyAI()
     {
+        AIManager.instance.aiInGame.Remove(this);
         Destroy(this.gameObject);
     }
 

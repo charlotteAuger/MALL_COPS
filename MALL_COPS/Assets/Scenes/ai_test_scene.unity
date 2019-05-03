@@ -2547,16 +2547,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8810459288497560957, guid: cd8ac63a106951a4db28cca92826812c,
         type: 3}
-      propertyPath: pointsOfInterest.Array.size
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 8810459288497560957, guid: cd8ac63a106951a4db28cca92826812c,
-        type: 3}
-      propertyPath: exits.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8810459288497560957, guid: cd8ac63a106951a4db28cca92826812c,
-        type: 3}
       propertyPath: pointsOfInterest.Array.data[0]
       value: 
       objectReference: {fileID: 1999896826}
