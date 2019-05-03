@@ -4969,7 +4969,7 @@ MonoBehaviour:
   chargeVibrationStep: 0.15
   tackleTime: 0.1
   tackleSpeed: 60
-  tackleRecovery: 0.5
+  tackleRecovery: 0.7
   alertRadius: 3
   civilianMask:
     serializedVersion: 2
@@ -5139,18 +5139,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2818767854189027142, guid: 2e984b46a7f6cf745917e58ec2333014,
         type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2818767854189027142, guid: 2e984b46a7f6cf745917e58ec2333014,
-        type: 3}
       propertyPath: m_LocalPosition.y
       value: 0.26
-      objectReference: {fileID: 0}
-    - target: {fileID: 2818767855040181546, guid: 2e984b46a7f6cf745917e58ec2333014,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2818767855040181546, guid: 2e984b46a7f6cf745917e58ec2333014,
         type: 3}
@@ -5159,33 +5149,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2818767854189027140, guid: 2e984b46a7f6cf745917e58ec2333014,
         type: 3}
-      propertyPath: stopAction
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2818767854189027140, guid: 2e984b46a7f6cf745917e58ec2333014,
-        type: 3}
-      propertyPath: lengthInSec
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2818767854189027140, guid: 2e984b46a7f6cf745917e58ec2333014,
-        type: 3}
-      propertyPath: looping
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2818767855040181544, guid: 2e984b46a7f6cf745917e58ec2333014,
-        type: 3}
-      propertyPath: stopAction
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2818767855040181544, guid: 2e984b46a7f6cf745917e58ec2333014,
-        type: 3}
       propertyPath: lengthInSec
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2818767855040181544, guid: 2e984b46a7f6cf745917e58ec2333014,
         type: 3}
-      propertyPath: looping
-      value: 0
+      propertyPath: lengthInSec
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2e984b46a7f6cf745917e58ec2333014, type: 3}
