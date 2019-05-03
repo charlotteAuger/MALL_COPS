@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     public int levelIndex;
     public float maxTimer;
     [HideInInspector] public float timer;
+    private bool rang;
 
     [Header("References")]
     public GameObject cameraPrefab;
@@ -58,9 +59,16 @@ public class GameManager : MonoBehaviour
         timer -= Time.deltaTime;
         HUDManager.Instance.UpdateTimer(timer);
 
+        if (!rang && maxTimer - timer <= 20.0f)
+        {
+            rang = true;
+            SFXManager.Instance.EndTimerSFX();
+        }
+
         if (timer <= 0)
         {
             gameState = GameStates.END_OF_LEVEL;
+            SFXManager.Instance.WinJingleSFX();
             HUDManager.Instance.OnVictory();
         }
     }
@@ -68,6 +76,7 @@ public class GameManager : MonoBehaviour
     public void Lose()
     {
         gameState = GameStates.END_OF_LEVEL;
+        SFXManager.Instance.LoseJingleSFX();
         HUDManager.Instance.OnDefeat();
     }
 
@@ -95,6 +104,7 @@ public class GameManager : MonoBehaviour
         fovBooster = cam.GetComponentInChildren<FOVBooster>();
         shaker = cam.GetComponentInChildren<ScreenShaker>();
         mainCam = cam.GetComponentInChildren<Camera>();
+        SFXManager.Instance.PlayThemeMusic();
     }
 
     private void OnDisable()

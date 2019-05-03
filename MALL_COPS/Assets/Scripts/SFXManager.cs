@@ -72,7 +72,7 @@ public class SFXManager : MonoBehaviour
 
     public void InnocentAngrySFX()
     {
-       // SFXSources[0].Stop();
+        SFXSources[0].Stop();
         SFXSources[0].PlayOneShot(SFX_LoopEmbrouille);
     }
 
@@ -82,13 +82,13 @@ public class SFXManager : MonoBehaviour
         SFXSources[1].PlayOneShot(SFX_RunBoucle);
     }
 
-    public void MallAmbianceSFX()
-    {
-        SFXSources[0].Stop();
-        SFXSources[0].PlayOneShot(SFX_MallAmbiance);
-    }
+    //public void MallAmbianceSFX()
+    //{
+    //    SFXSources[0].Stop();
+    //    SFXSources[0].PlayOneShot(SFX_MallAmbiance);
+    //}
 
-    public void LooseJingleSFX()
+    public void LoseJingleSFX()
     {
         musicSource.Stop();
         SFXSources[1].Stop();
