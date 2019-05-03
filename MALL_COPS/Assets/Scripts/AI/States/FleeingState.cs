@@ -12,7 +12,7 @@ public class FleeingState : State
 
     public override void OnStateEnter(AIController aiController)
     {
-        //ALARM
+        SFXManager.Instance.TheftAlarmSFX();
         aiController.anim.SetTrigger("flees");
 
         speed = aiController.stats.fleeingSpeed;
