@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class RandomCivilian : MonoBehaviour
 {
-    [SerializeField] private GameObject[] meshes;
-    private GameObject meshObject;
+    [SerializeField] private Renderer[] renderers;
+    [HideInInspector] public Renderer rend;
 
     private void OnEnable()
     {
-        meshObject = meshes[Random.Range(0, meshes.Length)];
-        meshObject.SetActive(true);
+        rend = renderers[Random.Range(0, renderers.Length)];
+        rend.transform.parent.gameObject.SetActive(true);
     }
 
     private void OnDisable()
     {
-        meshObject.SetActive(false);
+        rend.transform.parent.gameObject.SetActive(false);
     }
 }
