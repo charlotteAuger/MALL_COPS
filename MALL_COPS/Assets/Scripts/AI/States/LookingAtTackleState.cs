@@ -9,7 +9,7 @@ public class LookingAtTackleState : State
 
     public override void OnStateEnter(AIController aiController)
     {
-        //aiController.anim.SetTrigger("surprised");
+        aiController.anim.SetTrigger("surprised");
         
         duration = Random.Range(aiController.stats.tackleLookingTime_min, aiController.stats.tackleLookingTime_max);
     }

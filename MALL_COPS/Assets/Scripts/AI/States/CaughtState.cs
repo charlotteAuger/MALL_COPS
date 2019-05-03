@@ -20,7 +20,7 @@ public class CaughtState : State
         t += dt;
         if (t >= duration)
         {
-            aiController.SetPresence(false);
+            aiController.DestroyAI();
         }
         return null;
     }
