@@ -12,7 +12,7 @@ public class FleeingState : State
 
     public override void OnStateEnter(AIController aiController)
     {
-        //ALARM
+        SFXManager.Instance.TheftAlarmSFX();
         aiController.anim.SetTrigger("flees");
 
         speed = aiController.stats.fleeingSpeed;
@@ -41,7 +41,7 @@ public class FleeingState : State
         float remainingDistance = new Vector3(path[currentWP].x - aiController.transform.position.x, 0, path[currentWP].z - aiController.transform.position.z).magnitude;
 
         
-        if (remainingDistance <= aiController.stats.stopDistance)
+        if (remainingDistance <= aiController.stats.stopDistance*2)
         {
             if (currentWP < path.Length - 1)
             {

@@ -13,7 +13,11 @@ public class TackledState : State
 
         duration = aiController.stats.timeTackled; ///HOW LONG ?
         aiController.StopMovement();
-        base.OnStateEnter(aiController);
+
+        if (!wasRobbing)
+        {
+            SFXManager.Instance.InnocentPlaquageSFX();
+        }
     }
 
     public override void OnStateExit(AIController aiController)

@@ -11,7 +11,6 @@ public class AngryState : State
         angerLevel = aiController.stats.angerTime;
         aiController.angryRend.enabled = true;
         aiController.angryRend.materials[0].SetFloat("AngerValue", 0f);
-        base.OnStateEnter(aiController);
     }
 
     public override void OnStateExit(AIController aiController)
