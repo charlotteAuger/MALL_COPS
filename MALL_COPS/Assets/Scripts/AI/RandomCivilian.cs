@@ -5,12 +5,17 @@ using UnityEngine;
 public class RandomCivilian : MonoBehaviour
 {
     [SerializeField] private Renderer[] renderers;
+    [SerializeField] private Animator[] animators;
     [HideInInspector] public Renderer rend;
+    [HideInInspector] public Animator anim;
 
     private void OnEnable()
     {
-        rend = renderers[Random.Range(0, renderers.Length)];
+        int r = Random.Range(0, renderers.Length);
+        rend = renderers[r];
+        anim = animators[r];
         rend.transform.parent.gameObject.SetActive(true);
+
     }
 
     private void OnDisable()
