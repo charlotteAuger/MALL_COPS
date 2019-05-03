@@ -14,6 +14,7 @@ public class AIData : ScriptableObject
     public float ipLookingTime_max;
     public float inShopTime_min;
     public float inShopTime_max;
+    public float timeTackled;
 
     [Header("Movement")]
     public float walkSpeed_min;
