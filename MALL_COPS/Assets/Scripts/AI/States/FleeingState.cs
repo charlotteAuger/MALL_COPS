@@ -13,7 +13,7 @@ public class FleeingState : State
     public override void OnStateEnter(AIController aiController)
     {
         //ALARM
-        //aiController.anim.SetTrigger("flees");
+        aiController.anim.SetTrigger("flees");
 
         speed = aiController.stats.fleeingSpeed;
         stolenItem = aiController.SetupStolenItem(ip);
@@ -50,6 +50,7 @@ public class FleeingState : State
             else
             {
                 GameManager.Instance.Lose();
+                aiController.DestroyAI();
             }
         }
        
