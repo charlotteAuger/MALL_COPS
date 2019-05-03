@@ -27,7 +27,7 @@ public class AIController : MonoBehaviour
     [SerializeField] private Collider[] colliders;
     [SerializeField] private RandomCivilian randomCiv;
     [SerializeField] public Watchable watchable;
-    [SerializeField] public Animator anim;
+    [HideInInspector] public Animator anim;
     [SerializeField] public Renderer angryRend;
 
     public void InitAI(bool _isRobber, AIData _stats)
@@ -41,6 +41,7 @@ public class AIController : MonoBehaviour
         currentState = new GoingToIPState();
         currentState.OnStateEnter(this);
         state = currentState.GetType().ToString();
+        anim = randomCiv.anim;
 
 
         //Subscribe to watchable
